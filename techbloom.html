@@ -9,7 +9,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const cfg = {apiKey:"AIzaSyB91TWksL4X60dena297YxDPoU7e_BRROw",authDomain:"sentimentiq-99650.firebaseapp.com",projectId:"sentimentiq-99650",storageBucket:"sentimentiq-99650.firebasestorage.app",messagingSenderId:"217138788225",appId:"1:217138788225:web:5618cf699ebe051c6c9a80"};
+const cfg = {apiKey:"AIzaSyD1Y_5BkBdZHn7tzLZwruvvzZOAuD5YhMw",authDomain:"algoquest-505d7.firebaseapp.com",projectId:"algoquest-505d7",storageBucket:"algoquest-505d7.firebasestorage.app",messagingSenderId:"17997223063",appId:"1:17997223063:web:d867b9fa58cc856c7945d2",measurementId:"G-J0K2F1WDRK"};
 const app = initializeApp(cfg);
 const db  = getFirestore(app);
 window._fbDb=db; window._fbCol=collection; window._fbAdd=addDoc;
@@ -180,7 +180,10 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min
 .card:hover{box-shadow:var(--shadow-h)}
 .card-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
 .chart-wrap{position:relative;width:100%}
-.chart-wrap canvas{max-width:100%!important}
+.chart-wrap canvas{max-width:100%!important;height:auto!important}
+/* Fixed-height chart wrappers for scatter/compound to prevent growth */
+.chart-fixed{position:relative;width:100%;height:260px}
+.chart-fixed canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
 
 /* ── Word cloud ── */
 .wcloud{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:12px 8px;min-height:150px}
@@ -288,13 +291,13 @@ tr.new-r td{background:var(--mint)}
     <div class="sb-sub">Sentiment Intelligence</div>
   </div>
   <div class="sb-section">Dashboard</div>
-  <div class="sb-link active"><span class="sb-icon">✦</span> Overview</div>
-  <div class="sb-link"><span class="sb-icon">📊</span> Analytics</div>
-  <div class="sb-link"><span class="sb-icon">💬</span> Reviews</div>
-  <div class="sb-link"><span class="sb-icon">✍️</span> Submit</div>
+  <div class="sb-link active" onclick="navTo('overview',this)"><span class="sb-icon">✦</span> Overview</div>
+  <div class="sb-link" onclick="navTo('analytics',this)"><span class="sb-icon">📊</span> Analytics</div>
+  <div class="sb-link" onclick="navTo('reviews',this)"><span class="sb-icon">💬</span> Reviews</div>
+  <div class="sb-link" onclick="navTo('submit',this)"><span class="sb-icon">✍️</span> Submit</div>
   <div class="sb-section">Reports</div>
-  <div class="sb-link"><span class="sb-icon">⚠️</span> Churn Risk</div>
-  <div class="sb-link"><span class="sb-icon">🚨</span> Escalations</div>
+  <div class="sb-link" onclick="navTo('churn',this)"><span class="sb-icon">⚠️</span> Churn Risk</div>
+  <div class="sb-link" onclick="navTo('escalations',this)"><span class="sb-icon">🚨</span> Escalations</div>
   <div class="sb-footer">
     <div class="sb-product-chip">
       <div class="sb-product-label">Reviewing</div>
@@ -311,7 +314,7 @@ tr.new-r td{background:var(--mint)}
   <div class="sync-bar" id="syncBar">🌿 <span id="syncText"></span></div>
 
   <!-- Page header -->
-  <div class="page-header">
+  <div class="page-header" id="sec-overview">
     <div class="page-title">AuraPro <em>Laptop X7</em></div>
     <div class="page-sub">Real-time sentiment analysis · VADER + TextBlob ensemble · <span id="totalCount">20</span> reviews analyzed</div>
   </div>
@@ -345,15 +348,15 @@ tr.new-r td{background:var(--mint)}
   </div>
 
   <!-- Analytics section -->
-  <div class="section-head">Analytics</div>
+  <div class="section-head" id="sec-analytics">Analytics</div>
   <div class="grid3" style="margin-bottom:16px">
-    <div class="card chart-wrap"><div class="card-label">Sentiment Split</div><canvas id="donutC"></canvas></div>
-    <div class="card chart-wrap"><div class="card-label">Star Distribution</div><canvas id="barC"></canvas></div>
-    <div class="card chart-wrap"><div class="card-label">Sentiment × Stars</div><canvas id="stackC"></canvas></div>
+    <div class="card"><div class="card-label">Sentiment Split</div><div class="chart-wrap"><canvas id="donutC"></canvas></div></div>
+    <div class="card"><div class="card-label">Star Distribution</div><div class="chart-wrap"><canvas id="barC"></canvas></div></div>
+    <div class="card"><div class="card-label">Sentiment × Stars</div><div class="chart-wrap"><canvas id="stackC"></canvas></div></div>
   </div>
   <div class="grid2" style="margin-bottom:16px">
-    <div class="card chart-wrap" style="min-height:320px"><div class="card-label">Rating vs VADER Compound</div><canvas id="scatC" style="height:260px;width:100%"></canvas></div>
-    <div class="card chart-wrap" style="min-height:320px"><div class="card-label">Compound Score per Review</div><canvas id="compC" style="height:260px;width:100%"></canvas></div>
+    <div class="card" style="min-height:320px"><div class="card-label">Rating vs VADER Compound</div><div class="chart-fixed"><canvas id="scatC"></canvas></div></div>
+    <div class="card" style="min-height:320px"><div class="card-label">Compound Score per Review</div><div class="chart-fixed"><canvas id="compC"></canvas></div></div>
   </div>
   <div class="card" style="margin-bottom:24px">
     <div class="card-label">Positive Review Word Cloud</div>
@@ -372,7 +375,7 @@ tr.new-r td{background:var(--mint)}
   </div>
 
   <!-- Reviews table -->
-  <div class="section-head">Reviews</div>
+  <div class="section-head" id="sec-reviews">Reviews</div>
   <div class="filter-row">
     <button class="ftab active" onclick="filt('all',this)">All</button>
     <button class="ftab" onclick="filt('positive',this)">🌿 Positive</button>
@@ -391,7 +394,7 @@ tr.new-r td{background:var(--mint)}
   </div>
 
   <!-- Submit -->
-  <div class="form-section">
+  <div class="form-section" id="sec-submit">
     <div class="form-title">Share Your <em>Experience</em></div>
     <div class="form-sub">Write a review for the AuraPro Laptop X7 — it'll be analyzed instantly and update the dashboard live.</div>
     <div class="form-grid">
@@ -642,19 +645,19 @@ function initCharts(g){
 
   charts.donut=new Chart(document.getElementById('donutC'),{type:'doughnut',
     data:{labels:Object.keys(d),datasets:[{data:Object.values(d),backgroundColor:Object.keys(d).map(function(s){return COLORS[s]}),borderWidth:4,borderColor:'#ffffff',hoverOffset:8}]},
-    options:{cutout:'70%',responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#9188a8',font:{size:11},padding:14}}}}
+    options:{cutout:'70%',responsive:true,maintainAspectRatio:true,aspectRatio:1.6,plugins:{legend:{labels:{color:'#9188a8',font:{size:11},padding:14}}}}
   });
 
   var sc=[1,2,3,4,5].map(function(s){return reviews.filter(function(r){return r.rating===s}).length});
   charts.bar=new Chart(document.getElementById('barC'),{type:'bar',
     data:{labels:['1★','2★','3★','4★','5★'],datasets:[{data:sc,backgroundColor:['#f5c2d0','#e4b8d8','#c4b0e0','#b8e4d4','#86d4b0'],borderRadius:6,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}},y:{ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}}}}
+    options:{responsive:true,maintainAspectRatio:true,aspectRatio:1.6,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}},y:{ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}}}}
   });
 
   var sents=['positive','negative','neutral','mixed'];
   charts.stacked=new Chart(document.getElementById('stackC'),{type:'bar',
     data:{labels:['1★','2★','3★','4★','5★'],datasets:sents.map(function(s){return{label:s,data:[1,2,3,4,5].map(function(star){return reviews.filter(function(r){return r.rating===star&&r.analyzed.sent===s}).length}),backgroundColor:COLORS[s],borderRadius:2}})},
-    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#9188a8',font:{size:11}}}},scales:{x:{stacked:true,ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}},y:{stacked:true,ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}}}}
+    options:{responsive:true,maintainAspectRatio:true,aspectRatio:1.6,plugins:{legend:{labels:{color:'#9188a8',font:{size:11}}}},scales:{x:{stacked:true,ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}},y:{stacked:true,ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}}}}
   });
 
   function mkScatDS(){
@@ -690,6 +693,59 @@ function updateCharts(g){
   if(window._mkScatDS){charts.scat.data.datasets=window._mkScatDS();charts.scat.update();}
   if(window._mkCompData){var cd=window._mkCompData();charts.comp.data.labels=cd.labels;charts.comp.data.datasets[0].data=cd.scores;charts.comp.data.datasets[0].backgroundColor=cd.colors;charts.comp.update();}
   renderWordCloud();
+}
+
+// ─── Sidebar navigation ───────────────────────────────────────────────────────
+function navTo(section, btn){
+  // Update active state
+  document.querySelectorAll('.sb-link').forEach(function(b){b.classList.remove('active')});
+  if(btn) btn.classList.add('active');
+
+  // Map section to element ID
+  var targets = {
+    overview:    'sec-overview',
+    analytics:   'sec-analytics',
+    reviews:     'sec-reviews',
+    submit:      'sec-submit',
+    churn:       'sec-reviews',   // scroll to reviews, filtered
+    escalations: 'sec-reviews',
+  };
+  var el = document.getElementById(targets[section]);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+
+  // Special actions for report tabs
+  if(section==='churn'){
+    // filter table to show churn-risk reviews
+    var churnBtn = document.querySelector('.ftab[data-churn]');
+    var rows = reviews.filter(function(r){return r.analyzed.churn});
+    if(rows.length){
+      document.getElementById('tbody').innerHTML = renderRows(rows);
+      document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
+    }
+  } else if(section==='escalations'){
+    var escRows = reviews.filter(function(r){return r.analyzed.esc});
+    if(escRows.length){
+      document.getElementById('tbody').innerHTML = renderRows(escRows);
+      document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
+    }
+  }
+}
+
+function renderRows(rows){
+  var st=function(n){return '★'.repeat(n)+'☆'.repeat(5-n)};
+  return rows.map(function(r){
+    var a=r.analyzed;
+    return `<tr class="${r.isNew?'new-r':''}">
+      <td><span class="badge ${a.sent}">${a.emoji} ${a.sent}</span></td>
+      <td><span class="stars-txt">${st(r.rating)}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">${a.conf}%</td>
+      <td style="white-space:nowrap;font-weight:500;font-size:12px">${r.name}</td>
+      <td style="font-size:11px;color:var(--ink2);max-width:260px">${r.text.substring(0,110)}${r.text.length>110?'…':''}</td>
+      <td>${a.cats.slice(0,2).map(function(c){return `<span class="cat-chip">${c}</span>`}).join('')}</td>
+      <td style="font-size:10px;color:var(--muted);white-space:nowrap">${a.ints[0]||'—'}</td>
+      <td style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap">${r.date}</td>
+    </tr>`;
+  }).join('');
 }
 
 // ─── Star picker ──────────────────────────────────────────────────────────────

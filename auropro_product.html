@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AuraPro Laptop X7 — TechMall</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script type="module">
+import { initializeApp }          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg = {apiKey:"AIzaSyD1Y_5BkBdZHn7tzLZwruvvzZOAuD5YhMw",authDomain:"algoquest-505d7.firebaseapp.com",projectId:"algoquest-505d7",storageBucket:"algoquest-505d7.firebasestorage.app",messagingSenderId:"17997223063",appId:"1:17997223063:web:d867b9fa58cc856c7945d2",measurementId:"G-J0K2F1WDRK"};
+const app = initializeApp(cfg);
+const db  = getFirestore(app);
+window._fbDb=db; window._fbCol=collection; window._fbAdd=addDoc;
+window._fbQ=query; window._fbOrd=orderBy; window._fbSnap=onSnapshot;
+window._fbTs=serverTimestamp; window._fbReady=true;
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --lav:#ede9f6; --lav2:#d8d0f0; --lav3:#b8a9e3; --lav-ink:#5b3fa0;
+  --mint:#e2f4ee; --mint2:#b8e4d4; --mint-ink:#1a7a52;
+  --blush:#fce8ee; --blush2:#f5c2d0; --blush-ink:#b0364e;
+  --cream:#fdfaf6; --white:#ffffff;
+  --ink:#2d2640; --ink2:#4a4260; --muted:#9188a8; --border:#e8e2f5;
+  --shadow:0 2px 8px rgba(91,63,160,0.07),0 8px 24px rgba(91,63,160,0.05);
+  --shadow-h:0 4px 16px rgba(91,63,160,0.13),0 12px 36px rgba(91,63,160,0.09);
+  --r:16px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 40px;height:64px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink)}
+.nav-logo em{color:var(--lav-ink);font-style:italic}
+.nav-search{flex:1;max-width:500px;display:flex;border:1.5px solid var(--lav2);border-radius:10px;overflow:hidden;background:var(--cream)}
+.nav-search input{flex:1;padding:9px 16px;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);outline:none}
+.nav-search button{background:var(--lav-ink);color:white;border:none;padding:0 18px;cursor:pointer;font-size:12px;font-weight:500;letter-spacing:.5px;transition:opacity .15s}
+.nav-search button:hover{opacity:.85}
+.nav-right{margin-left:auto;display:flex;gap:24px;align-items:center;font-size:13px;color:var(--ink2)}
+.nav-right span{cursor:pointer;font-weight:500;transition:color .15s}
+.nav-right span:hover{color:var(--lav-ink)}
+
+/* Top banner */
+.dash-banner{background:linear-gradient(90deg,var(--lav-ink),#7c5ec0);color:white;padding:11px 40px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:12px;font-weight:500;letter-spacing:.3px}
+.dash-banner a{color:#e2d4ff;text-decoration:none;font-weight:600}
+.dash-banner a:hover{text-decoration:underline}
+
+/* Breadcrumb */
+.breadcrumb{padding:14px 40px;font-size:12px;color:var(--muted);background:var(--white);border-bottom:1px solid var(--border)}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:color .15s}
+.breadcrumb a:hover{color:var(--lav-ink)}
+.breadcrumb span{margin:0 6px;color:var(--lav2)}
+
+/* PRODUCT LAYOUT */
+.product-wrap{max-width:1200px;margin:32px auto;padding:0 40px;display:grid;grid-template-columns:480px 1fr;gap:28px}
+@media(max-width:900px){.product-wrap{grid-template-columns:1fr;padding:0 20px}}
+
+/* IMAGE PANEL */
+.img-panel{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
+.main-img{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,var(--lav) 0%,var(--mint) 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:100px;margin-bottom:16px;border:1px solid var(--border);position:relative;overflow:hidden}
+.main-img::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 25%,rgba(255,255,255,0.55),transparent 65%)}
+.thumb-row{display:flex;gap:10px}
+.thumb{width:68px;height:54px;background:var(--lav);border:2px solid transparent;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .15s}
+.thumb.active,.thumb:hover{border-color:var(--lav-ink);background:var(--lav2)}
+
+/* INFO PANEL */
+.info-panel{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
+.info-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--lav-ink);background:var(--lav);border:1px solid var(--lav2);padding:4px 12px;border-radius:100px;margin-bottom:14px}
+.product-name{font-family:'Playfair Display',serif;font-size:24px;line-height:1.3;margin-bottom:16px;color:var(--ink)}
+.product-name em{color:var(--lav-ink);font-style:italic}
+
+.rating-row{display:flex;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
+.stars{color:#e8a000;letter-spacing:1px;font-size:16px}
+.rating-val{font-family:'Playfair Display',serif;font-weight:600;font-size:16px;color:#b08000;border-bottom:1.5px solid #e8a000}
+.rating-ct{font-size:12px;color:var(--muted)}
+.sold{font-size:12px;color:var(--muted);padding-left:14px;border-left:1px solid var(--border)}
+
+.price-box{background:linear-gradient(135deg,var(--lav),#f5f0ff);border:1px solid var(--lav2);border-radius:12px;padding:20px 22px;margin-bottom:20px}
+.price-main{font-family:'Playfair Display',serif;font-size:36px;line-height:1;color:var(--ink);letter-spacing:-1px}
+.price-orig{font-size:14px;color:var(--muted);text-decoration:line-through;margin-left:10px}
+.price-disc{background:var(--blush-ink);color:white;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;margin-left:8px;letter-spacing:.5px}
+.price-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5}
+
+/* Spec chips */
+.spec-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.spec-chip{background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:12px 10px;text-align:center}
+.spec-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--lav-ink);margin-bottom:3px}
+.spec-key{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+
+/* Variants */
+.var-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.variants{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.var-btn{border:1.5px solid var(--lav2);padding:8px 16px;font-size:12px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;background:var(--cream);color:var(--ink2);border-radius:8px;transition:all .15s}
+.var-btn.active{background:var(--lav);border-color:var(--lav-ink);color:var(--lav-ink)}
+.var-btn:hover:not(.active){border-color:var(--lav3);color:var(--lav-ink)}
+
+.qty-row{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.qty-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);width:80px}
+.qty-ctrl{display:flex;border:1.5px solid var(--lav2);border-radius:8px;overflow:hidden}
+.qty-b{width:36px;height:36px;border:none;background:var(--lav);cursor:pointer;font-size:16px;color:var(--lav-ink);font-weight:600;transition:background .15s}
+.qty-b:hover{background:var(--lav2)}
+.qty-n{width:48px;height:36px;border:none;border-left:1.5px solid var(--lav2);border-right:1.5px solid var(--lav2);text-align:center;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;background:var(--white);color:var(--ink)}
+.avail{font-size:12px;color:var(--muted)}
+
+.action-row{display:flex;gap:10px;margin-bottom:22px}
+.btn-cart{flex:1;padding:14px;border:1.5px solid var(--lav-ink);color:var(--lav-ink);background:var(--lav);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border-radius:10px;transition:all .15s}
+.btn-cart:hover{background:var(--lav2)}
+.btn-buy{flex:1;padding:14px;background:linear-gradient(135deg,var(--lav-ink),#7c5ec0);color:white;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border-radius:10px;transition:opacity .15s;box-shadow:0 4px 14px rgba(91,63,160,.28)}
+.btn-buy:hover{opacity:.88}
+
+.shop-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1.5px solid var(--lav2);border-radius:12px;background:var(--lav)}
+.shop-av{width:40px;height:40px;background:linear-gradient(135deg,var(--lav-ink),#7c5ec0);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-family:'Playfair Display',serif;font-weight:600;font-size:16px;box-shadow:0 4px 10px rgba(91,63,160,.25)}
+.shop-name{font-weight:600;font-size:13px;color:var(--ink)}
+.shop-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.btn-visit{margin-left:auto;border:1.5px solid var(--lav2);padding:7px 16px;font-size:11px;font-weight:600;background:var(--white);cursor:pointer;border-radius:8px;color:var(--lav-ink);transition:all .15s;font-family:'Inter',sans-serif;letter-spacing:.3px}
+.btn-visit:hover{background:var(--lav-ink);color:white;border-color:var(--lav-ink)}
+
+/* REVIEWS */
+.reviews-wrap{max-width:1200px;margin:0 auto 40px;padding:0 40px}
+@media(max-width:900px){.reviews-wrap{padding:0 20px}}
+.reviews-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:32px;box-shadow:var(--shadow)}
+.section-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.section-title em{color:var(--lav-ink);font-style:italic}
+
+.rating-summary{display:flex;gap:40px;padding:22px 24px;background:var(--lav);border:1px solid var(--lav2);border-radius:12px;margin-bottom:24px;align-items:center;flex-wrap:wrap;gap:24px}
+.rb-big{text-align:center;min-width:90px}
+.rb-num{font-family:'Playfair Display',serif;font-size:52px;font-weight:600;line-height:1;color:var(--lav-ink)}
+.rb-stars{color:#e8a000;font-size:18px;letter-spacing:1px;margin:6px 0 4px}
+.rb-out{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.rb-bars{flex:1;min-width:200px}
+.br-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
+.br-lbl{width:28px;text-align:right;color:var(--lav-ink);font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px}
+.br-track{flex:1;height:7px;background:var(--lav2);border-radius:100px;overflow:hidden}
+.br-fill{height:100%;background:linear-gradient(90deg,var(--lav-ink),var(--lav3));border-radius:100px;transition:width .6s ease}
+.br-cnt{width:30px;color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace}
+
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.f-tab{padding:7px 16px;border:1.5px solid var(--lav2);background:var(--cream);font-size:11px;font-weight:500;cursor:pointer;color:var(--muted);border-radius:100px;transition:all .15s;font-family:'Inter',sans-serif}
+.f-tab.active{background:var(--lav-ink);color:white;border-color:var(--lav-ink)}
+.f-tab:hover:not(.active){border-color:var(--lav-ink);color:var(--lav-ink)}
+
+.review-list{border-top:1px solid var(--border)}
+.r-item{padding:24px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:130px 1fr;gap:24px}
+@media(max-width:600px){.r-item{grid-template-columns:1fr}}
+.r-user{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.r-avatar{width:44px;height:44px;background:var(--lav);border:2px solid var(--lav2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.r-name{font-weight:600;font-size:12px;color:var(--ink)}
+.r-meta{font-size:10px;color:var(--muted);letter-spacing:.3px}
+.r-content{}
+.r-stars{color:#e8a000;font-size:14px;letter-spacing:1px;margin-bottom:8px}
+.r-text{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:10px}
+.r-variation{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+.r-date{font-size:11px;color:var(--muted)}
+.r-helpful{display:flex;align-items:center;gap:8px;margin-top:10px}
+.helpful-btn{border:1.5px solid var(--lav2);background:var(--cream);padding:4px 12px;font-size:11px;color:var(--muted);cursor:pointer;border-radius:100px;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:5px}
+.helpful-btn:hover{border-color:var(--lav-ink);color:var(--lav-ink)}
+.seller-reply{background:var(--lav);border-left:3px solid var(--lav-ink);padding:12px 16px;margin-top:12px;font-size:12px;color:var(--ink2);line-height:1.6;border-radius:0 8px 8px 0}
+.seller-reply-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--lav-ink);margin-bottom:6px}
+.r-item.is-new{animation:highlightNew 2.5s ease}
+@keyframes highlightNew{0%,20%{background:var(--mint)}100%{background:transparent}}
+
+/* Write review */
+.write-wrap{max-width:1200px;margin:0 auto 60px;padding:0 40px}
+@media(max-width:900px){.write-wrap{padding:0 20px}}
+.write-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:32px;box-shadow:var(--shadow)}
+.write-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--ink);margin-bottom:6px}
+.write-title em{color:var(--lav-ink);font-style:italic}
+.write-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.w-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:600px){.w-grid{grid-template-columns:1fr}}
+.w-full{margin-bottom:14px}
+.w-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;display:block}
+.w-input,.w-select,.w-textarea{width:100%;padding:10px 14px;border:1.5px solid var(--lav2);border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;transition:border-color .15s,box-shadow .15s}
+.w-input:focus,.w-select:focus,.w-textarea:focus{border-color:var(--lav-ink);box-shadow:0 0 0 3px var(--lav)}
+.w-textarea{resize:vertical;min-height:110px}
+.w-star-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.w-stars{display:flex;gap:6px;margin-bottom:16px}
+.w-star{width:36px;height:36px;border:1.5px solid var(--lav2);border-radius:8px;background:var(--cream);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .12s;color:var(--lav2)}
+.w-star.on{background:var(--blush);border-color:var(--blush2);color:#e8314c}
+.w-star:hover{border-color:var(--blush2);color:#e8314c}
+.w-btn{background:linear-gradient(135deg,var(--lav-ink),#7c5ec0);color:white;border:none;padding:13px 32px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border-radius:10px;box-shadow:0 4px 14px rgba(91,63,160,.28);transition:opacity .15s;display:inline-flex;align-items:center;gap:8px}
+.w-btn:hover{opacity:.88}
+.w-btn:disabled{opacity:.5;cursor:not-allowed}
+.w-spinner{font-size:12px;color:var(--muted);display:none;margin-left:4px}
+.w-success{display:none;background:var(--mint);border:1px solid var(--mint2);border-left:3px solid var(--mint-ink);padding:14px 18px;margin-top:14px;color:var(--mint-ink);font-size:13px;border-radius:0 10px 10px 0}
+.w-note{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5}
+
+/* Pagination */
+.pagination{display:flex;justify-content:center;gap:6px;margin-top:28px}
+.pg-btn{width:36px;height:36px;border:1.5px solid var(--lav2);background:var(--cream);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--ink2);transition:all .15s}
+.pg-btn.active{background:var(--lav-ink);color:white;border-color:var(--lav-ink)}
+.pg-btn:hover:not(.active){border-color:var(--lav-ink);color:var(--lav-ink)}
+
+/* Footer */
+footer{background:var(--white);border-top:1px solid var(--border);padding:24px 40px;text-align:center;font-size:12px;color:var(--muted);letter-spacing:.3px}
+footer a{color:var(--lav-ink);text-decoration:none;font-weight:500}
+footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="dash-banner">
+  🌸 Real-time sentiment analysis by <a href="techbloom.html" target="_blank">TechBloom Dashboard →</a>
+  &nbsp;·&nbsp; Your review updates the dashboard instantly
+</div>
+
+<nav>
+  <div class="nav-logo">Tech<em>Mall</em></div>
+  <div class="nav-search">
+    <input type="text" placeholder="Search laptops, accessories, peripherals..."/>
+    <button>Search</button>
+  </div>
+  <div class="nav-right">
+    <span>📦 Orders</span>
+    <span>🛒 Cart (1)</span>
+    <span>👤 Account</span>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="#">Home</a><span>›</span>
+  <a href="#">Electronics</a><span>›</span>
+  <a href="#">Laptops</a><span>›</span>
+  AuraPro Laptop X7
+</div>
+
+<!-- Product -->
+<div class="product-wrap">
+  <div class="img-panel">
+    <div class="main-img">💻</div>
+    <div class="thumb-row">
+      <div class="thumb active">💻</div>
+      <div class="thumb">📦</div>
+      <div class="thumb">⌨️</div>
+      <div class="thumb">🖥️</div>
+      <div class="thumb">🔋</div>
+    </div>
+  </div>
+
+  <div class="info-panel">
+    <div class="info-badge">✦ Official Store</div>
+    <div class="product-name">AuraPro Laptop <em>X7</em> — Snapdragon X Elite / M3 Max, 2.8K OLED, 14h Battery, Wi-Fi 7</div>
+
+    <div class="rating-row">
+      <span class="rating-val">4.4</span>
+      <span class="stars">★★★★½</span>
+      <span class="rating-ct">3,184 ratings</span>
+      <span class="sold">9,847 sold</span>
+    </div>
+
+    <div class="price-box">
+      <div>
+        <span class="price-main">₱84,999</span>
+        <span class="price-orig">₱119,999</span>
+        <span class="price-disc">−29%</span>
+      </div>
+      <div class="price-note">Free shipping · 0% installment up to 24 months · 1-year official warranty · Free laptop bag</div>
+    </div>
+
+    <div class="spec-row">
+      <div class="spec-chip"><div class="spec-val">2.8K</div><div class="spec-key">OLED 120Hz</div></div>
+      <div class="spec-chip"><div class="spec-val">32GB</div><div class="spec-key">LPDDR5X RAM</div></div>
+      <div class="spec-chip"><div class="spec-val">1TB</div><div class="spec-key">NVMe SSD</div></div>
+      <div class="spec-chip"><div class="spec-val">14h</div><div class="spec-key">Battery Life</div></div>
+      <div class="spec-chip"><div class="spec-val">140W</div><div class="spec-key">Fast Charge</div></div>
+      <div class="spec-chip"><div class="spec-val">1.38kg</div><div class="spec-key">Weight</div></div>
+    </div>
+
+    <div class="var-label">Model Variant</div>
+    <div class="variants">
+      <button class="var-btn active">X7 — Core i7</button>
+      <button class="var-btn" onclick="this.closest('.variants').querySelectorAll('.var-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">X7 — Ryzen 9</button>
+      <button class="var-btn" onclick="this.closest('.variants').querySelectorAll('.var-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">X7 Max — M3</button>
+      <button class="var-btn" onclick="this.closest('.variants').querySelectorAll('.var-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">X7 Lite</button>
+    </div>
+
+    <div class="qty-row">
+      <span class="qty-label">Quantity</span>
+      <div class="qty-ctrl">
+        <button class="qty-b" onclick="var n=document.getElementById('qtyN');if(+n.value>1)n.value=+n.value-1">−</button>
+        <input class="qty-n" id="qtyN" value="1" readonly/>
+        <button class="qty-b" onclick="var n=document.getElementById('qtyN');if(+n.value<10)n.value=+n.value+1">+</button>
+      </div>
+      <span class="avail">312 units left</span>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-cart">🛒 Add to Cart</button>
+      <button class="btn-buy">✦ Buy Now</button>
+    </div>
+
+    <div class="shop-row">
+      <div class="shop-av">A</div>
+      <div>
+        <div class="shop-name">AuraTech Official PH</div>
+        <div class="shop-meta">Online now · 4.9 ★ · 72.3k followers · Verified Brand</div>
+      </div>
+      <button class="btn-visit">Visit Shop</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reviews -->
+<div class="reviews-wrap">
+  <div class="reviews-card">
+    <div class="section-title">Customer <em>Reviews</em></div>
+
+    <div class="rating-summary">
+      <div class="rb-big">
+        <div class="rb-num">4.4</div>
+        <div class="rb-stars">★★★★☆</div>
+        <div class="rb-out">Out of 5</div>
+      </div>
+      <div class="rb-bars">
+        <div class="br-row"><span class="br-lbl">5★</span><div class="br-track"><div class="br-fill" style="width:60%"></div></div><span class="br-cnt">1910</span></div>
+        <div class="br-row"><span class="br-lbl">4★</span><div class="br-track"><div class="br-fill" style="width:22%"></div></div><span class="br-cnt">700</span></div>
+        <div class="br-row"><span class="br-lbl">3★</span><div class="br-track"><div class="br-fill" style="width:9%"></div></div><span class="br-cnt">287</span></div>
+        <div class="br-row"><span class="br-lbl">2★</span><div class="br-track"><div class="br-fill" style="width:5%"></div></div><span class="br-cnt">159</span></div>
+        <div class="br-row"><span class="br-lbl">1★</span><div class="br-track"><div class="br-fill" style="width:4%"></div></div><span class="br-cnt">127</span></div>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <button class="f-tab active" onclick="filterReviews('all',this)">All (3,184)</button>
+      <button class="f-tab" onclick="filterReviews('5',this)">5 ★ (1,910)</button>
+      <button class="f-tab" onclick="filterReviews('4',this)">4 ★ (700)</button>
+      <button class="f-tab" onclick="filterReviews('3',this)">3 ★ (287)</button>
+      <button class="f-tab" onclick="filterReviews('2',this)">2 ★ (159)</button>
+      <button class="f-tab" onclick="filterReviews('1',this)">1 ★ (127)</button>
+    </div>
+
+    <div class="review-list" id="reviewList"></div>
+
+    <div class="pagination">
+      <button class="pg-btn active">1</button>
+      <button class="pg-btn">2</button>
+      <button class="pg-btn">3</button>
+      <button class="pg-btn">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- Write a Review -->
+<div class="write-wrap">
+  <div class="write-card">
+    <div class="write-title">Share Your <em>Experience</em></div>
+    <div class="write-sub">Your review will appear here and update the <a href="techbloom.html" style="color:var(--lav-ink);font-weight:600">TechBloom Dashboard</a> in real time.</div>
+
+    <div class="w-grid">
+      <div>
+        <label class="w-label">Your Name</label>
+        <input class="w-input" id="wrName" type="text" placeholder="e.g. Jamie L."/>
+      </div>
+      <div>
+        <label class="w-label">Model Variant</label>
+        <select class="w-select" id="wrVariation">
+          <option>AuraPro X7 — Core i7</option>
+          <option>AuraPro X7 — Ryzen 9</option>
+          <option>AuraPro X7 Max — M3</option>
+          <option>AuraPro X7 Lite</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="w-star-label">Star Rating</div>
+    <div class="w-stars" id="wrStars">
+      <button class="w-star" onclick="pickStar(1)">★</button>
+      <button class="w-star" onclick="pickStar(2)">★</button>
+      <button class="w-star" onclick="pickStar(3)">★</button>
+      <button class="w-star" onclick="pickStar(4)">★</button>
+      <button class="w-star" onclick="pickStar(5)">★</button>
+    </div>
+
+    <div class="w-full">
+      <label class="w-label">Your Review</label>
+      <textarea class="w-textarea" id="wrText" placeholder="Tell us about battery life, performance, display quality, build, keyboard, thermals..."></textarea>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <button class="w-btn" id="wrBtn" onclick="submitMockReview()">✦ Post Review</button>
+      <span class="w-spinner" id="wrSpinner">⏳ Saving...</span>
+    </div>
+    <div class="w-note">📊 Your review is automatically analyzed for sentiment and reflected on the <a href="techbloom.html" style="color:var(--lav-ink)">TechBloom Dashboard</a>.</div>
+    <div class="w-success" id="wrSuccess"></div>
+  </div>
+</div>
+
+<footer>
+  TechMall PH &nbsp;·&nbsp; Demo page for academic project &nbsp;·&nbsp; Not affiliated with any real brand
+  &nbsp;&nbsp;|&nbsp;&nbsp; <a href="techbloom.html">🌸 View TechBloom Sentiment Dashboard →</a>
+</footer>
+
+<script>
+const SEED_REVIEWS = [
+  {id:1,name:"Alicia R.",avatar:"👩",rating:5,date:"2025-05-01",variation:"AuraPro X7 — Core i7",text:"Absolutely in love with this laptop. The build quality is stunning — aluminum chassis with no flex whatsoever. Performance is incredible for both creative work and gaming. The display colors are vivid and accurate, perfect for photo editing. Battery lasts 11 hours on light use. Best laptop I've ever owned.",helpful:64,reply:"Thank you Alicia! Enjoy your AuraPro! 💜 —AuraTech Team"},
+  {id:2,name:"Brandon K.",avatar:"👨",rating:1,date:"2025-04-28",variation:"AuraPro X7 — Ryzen 9",text:"Terrible thermal management. The laptop throttles aggressively under load and the fans are unbearably loud. Gets dangerously hot near the keyboard area. Customer support refused a refund and ignored my complaint for 3 weeks. I am filing a report with consumer protection. Do not buy.",helpful:58,reply:null},
+  {id:3,name:"Clara M.",avatar:"👩",rating:5,date:"2025-04-25",variation:"AuraPro X7 Max — M3",text:"This machine is a powerhouse. Silently handles video editing, 3D rendering, and gaming without breaking a sweat. The M3 chip efficiency is outstanding — battery life is genuinely all-day. The display is gorgeous, best I've ever used. Thin, light, premium. Highly recommend.",helpful:72,reply:"So happy to hear that, Clara! 🌟"},
+  {id:4,name:"Derek S.",avatar:"👨",rating:2,date:"2025-04-22",variation:"AuraPro X7 Lite",text:"Disappointed with the build quality on the Lite model. The plastic chassis creaks and the hinge feels loose after a month. Trackpad is unresponsive sometimes. Software is full of bloatware. For the price I expected much better. Won't be buying from this brand again.",helpful:41,reply:null},
+  {id:5,name:"Evelyn T.",avatar:"👩",rating:5,date:"2025-04-19",variation:"AuraPro X7 — Core i7",text:"Phenomenal laptop. The keyboard is the best I've typed on — firm, tactile, backlit perfectly. Display is bright and sharp even in direct sunlight. Runs cool and quiet under moderate loads. Ports are excellent: USB-C Thunderbolt, HDMI, SD card. Worth every penny.",helpful:55,reply:"Thank you Evelyn! Glad you love the keyboard! ⌨️"},
+  {id:6,name:"Felix H.",avatar:"👨",rating:3,date:"2025-04-16",variation:"AuraPro X7 — Ryzen 9",text:"Mixed feelings. Performance is great and the display is gorgeous. But the thermal solution lets it down — gets warm during sustained workloads and the fan noise is noticeable. Battery life is just average for this class. Good laptop but not exceptional given the price tag.",helpful:28,reply:null},
+  {id:7,name:"Grace O.",avatar:"👩",rating:1,date:"2025-04-13",variation:"AuraPro X7 Max — M3",text:"Received a unit with dead pixels right out of the box. Seller refuses to acknowledge the defect. I have already initiated a credit card dispute and will escalate to a formal complaint if unresolved. This is completely unacceptable at this price. Scam product. Avoid.",helpful:83,reply:null},
+  {id:8,name:"Henry J.",avatar:"👨",rating:4,date:"2025-04-10",variation:"AuraPro X7 — Core i7",text:"Really solid workhorse. Performance handles my development environment, Docker, and multiple VMs without complaint. Display is accurate and comfortable for long coding sessions. My only gripe is the webcam quality — it's just okay. Build is premium and feels great. Would recommend.",helpful:37,reply:"Thanks Henry! Webcam upgrade noted for the next iteration! 🙏"},
+  {id:9,name:"Isabel N.",avatar:"👩",rating:5,date:"2025-04-07",variation:"AuraPro X7 — Ryzen 9",text:"Absolute dream laptop for video editing. Renders faster than my old desktop. The display with HDR support is breathtaking — colors pop beautifully. Fanless under light loads. Arrived well packaged, fast shipping. The best investment I've made for my creative workflow.",helpful:61,reply:"That means a lot to hear! Happy creating! 🎬"},
+  {id:10,name:"James P.",avatar:"👨",rating:2,date:"2025-04-04",variation:"AuraPro X7 Lite",text:"Battery life is far worse than advertised. They claim 12 hours but I barely get 5 on normal brightness settings. The display has a slight pink tint I can't calibrate away. For a premium priced laptop these are unacceptable flaws. Customer support was helpful but couldn't resolve my issues.",helpful:44,reply:null},
+  {id:11,name:"Karen L.",avatar:"👩",rating:5,date:"2025-04-01",variation:"AuraPro X7 Max — M3",text:"The M3 variant is just extraordinary. Blazing fast, completely silent, runs cool all day. Battery is exceptional — 14 hours with mixed workloads. The slim design is elegant without sacrificing port selection. The display calibration out of the box is flawless. Zero regrets.",helpful:79,reply:"Karen! This review made our day! Thank you 🌸"},
+  {id:12,name:"Leo W.",avatar:"👨",rating:4,date:"2025-03-28",variation:"AuraPro X7 — Core i7",text:"Great laptop overall. Boots in seconds, handles multitasking beautifully. Build quality feels premium and solid. The trackpad is smooth and precise — best Windows trackpad I've used. Minor issue: USB-A port placement is awkward. Battery lasts a full workday easily. Happy with the purchase.",helpful:32,reply:"Great point on the ports, Leo! Noted for V8! 🔧"},
+  {id:13,name:"Maya D.",avatar:"👩",rating:1,date:"2025-03-25",variation:"AuraPro X7 — Ryzen 9",text:"Screen flickered and died after 6 weeks. No physical damage whatsoever. Warranty claim denied because they claim liquid damage which is impossible — I've never had liquid near this laptop. This is fraudulent warranty denial. I am pursuing legal action and filed a BBB complaint.",helpful:91,reply:null},
+  {id:14,name:"Nathan B.",avatar:"👨",rating:5,date:"2025-03-22",variation:"AuraPro X7 — Core i7",text:"Switched from a competitor and I am blown away. Keyboard is superb, trackpad is buttery smooth, display is vivid and bright. Performance is reliable and consistent — no throttling even after extended gaming sessions. The cooling system is genuinely impressive. Exceptional laptop.",helpful:48,reply:"Welcome to AuraPro, Nathan! 🎉"},
+  {id:15,name:"Olivia C.",avatar:"👩",rating:3,date:"2025-03-19",variation:"AuraPro X7 Lite",text:"Decent budget option with some trade-offs. The display is good but not great — viewing angles could be better. Build quality is acceptable if slightly plasticky. Performance is adequate for everyday tasks. Battery life is honest at around 7 hours. Delivered on time, well packaged.",helpful:19,reply:null},
+  {id:16,name:"Patrick G.",avatar:"👨",rating:5,date:"2025-03-16",variation:"AuraPro X7 Max — M3",text:"This laptop redefined my expectations. Completely silent operation even under heavy workloads. The display is the best panel I've ever seen on a laptop — brilliant HDR, perfect colors. Thin and light enough to take everywhere. Fast charging from 0-80% in 45 minutes. Outstanding.",helpful:66,reply:"Outstanding feedback Patrick! Thank you! ⚡"},
+  {id:17,name:"Quinn F.",avatar:"👩",rating:2,date:"2025-03-13",variation:"AuraPro X7 — Ryzen 9",text:"Severe thermal throttling issues. Gaming performance drops 40% after 10 minutes as the CPU throttles to manage heat. The chassis around the keyboard gets uncomfortably hot. For a gaming laptop this is disqualifying. Very disappointed given the price. Not recommended for sustained workloads.",helpful:53,reply:null},
+  {id:18,name:"Rachel T.",avatar:"👩",rating:5,date:"2025-03-10",variation:"AuraPro X7 — Core i7",text:"Perfect laptop for my needs as a designer. Color accuracy on the display is exceptional — P3 wide gamut coverage. Fast enough for Illustrator, Photoshop, and light video work simultaneously. Keyboard feedback is satisfying. Build quality is refined and premium. Genuinely happy.",helpful:44,reply:"So glad it's perfect for your design work! 🎨"},
+  {id:19,name:"Sam K.",avatar:"👨",rating:1,date:"2025-03-07",variation:"AuraPro X7 Lite",text:"Worst laptop I've ever purchased. Hinge broke on its own after 2 months. Seller insisting it's physical damage and refusing warranty repair. Completely dishonest business practices. Never buying from this company again. Avoid at all costs. Already warned everyone I know.",helpful:77,reply:null},
+  {id:20,name:"Tina R.",avatar:"👩",rating:4,date:"2025-03-04",variation:"AuraPro X7 Max — M3",text:"Very happy overall. Performance is top class and completely silent — remarkable engineering. Battery life truly delivers on the promises. The display is gorgeous. Only minor complaint is limited port selection on the base model — needed a hub. Highly recommend for professionals.",helpful:36,reply:"Thank you Tina! A hub bundle option is coming soon! 🔌"},
+];
+
+let ALL_REVIEWS = [...SEED_REVIEWS];
+let currentFilter = 'all';
+let selectedStar = 0;
+
+function starsHTML(n){ return '★'.repeat(n)+'☆'.repeat(5-n); }
+
+function renderReviews(filter){
+  currentFilter = filter;
+  const list = filter==='all' ? ALL_REVIEWS
+    : ALL_REVIEWS.filter(r => r.rating === parseInt(filter));
+
+  document.getElementById('reviewList').innerHTML = list.map(r => `
+    <div class="r-item${r.isNew?' is-new':''}">
+      <div class="r-user">
+        <div class="r-avatar">${r.avatar||'👤'}</div>
+        <div class="r-name">${r.name}</div>
+        <div class="r-meta">Verified Purchase</div>
+      </div>
+      <div class="r-content">
+        <div class="r-stars">${starsHTML(r.rating)}</div>
+        <div class="r-text">${r.text}</div>
+        <div class="r-variation">${r.variation}</div>
+        <div class="r-date">${r.date}</div>
+        <div class="r-helpful">
+          <span style="font-size:11px;color:var(--muted)">Helpful?</span>
+          <button class="helpful-btn">👍 ${r.helpful||0}</button>
+        </div>
+        ${r.reply ? `<div class="seller-reply"><div class="seller-reply-label">Seller Response</div>${r.reply}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterReviews(f, btn){
+  document.querySelectorAll('.f-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderReviews(f);
+}
+
+function pickStar(n){
+  selectedStar=n;
+  document.querySelectorAll('.w-star').forEach((b,i)=>b.classList.toggle('on',i<n));
+}
+
+async function submitMockReview(){
+  const name      = document.getElementById('wrName').value.trim()||'Anonymous';
+  const text      = document.getElementById('wrText').value.trim();
+  const variation = document.getElementById('wrVariation').value;
+  if(!text)        { alert('Please write your review first.'); return; }
+  if(!selectedStar){ alert('Please select a star rating.');    return; }
+
+  const btn = document.getElementById('wrBtn'), sp = document.getElementById('wrSpinner');
+  btn.disabled=true; sp.style.display='inline';
+
+  const data = { name, rating:selectedStar, date:new Date().toISOString().slice(0,10), variation, text };
+
+  let saved = false;
+  if(window._fbReady){
+    try {
+      await window._fbAdd(window._fbCol(window._fbDb,'laptop_reviews'), {...data, createdAt:window._fbTs()});
+      saved = true;
+    } catch(e){ console.error(e); }
+  }
+
+  const localR = {...data, id:Date.now(), avatar:'👤', helpful:0, reply:null, isNew:true};
+  ALL_REVIEWS.unshift(localR);
+  renderReviews(currentFilter);
+
+  document.getElementById('wrName').value='';
+  document.getElementById('wrText').value='';
+  selectedStar=0;
+  document.querySelectorAll('.w-star').forEach(b=>b.classList.remove('on'));
+
+  const s = document.getElementById('wrSuccess');
+  s.style.display='block';
+  s.innerHTML=`✅ Review posted! <strong>${name}</strong>, your ${data.rating}★ review is live${saved?' on all devices':' locally'}. <a href="techbloom.html" target="_blank" style="color:var(--mint-ink);font-weight:600">→ See on Dashboard</a>`;
+
+  btn.disabled=false; sp.style.display='none';
+  document.getElementById('reviewList').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>{ localR.isNew=false; renderReviews(currentFilter); }, 3000);
+}
+
+// Firebase listener
+function startFirebaseListener(){
+  const q = window._fbQ(window._fbCol(window._fbDb,'laptop_reviews'), window._fbOrd('createdAt','desc'));
+  window._fbSnap(q, snap => {
+    snap.docChanges().forEach(ch => {
+      if(ch.type!=='added') return;
+      if(ALL_REVIEWS.some(r => r._fbId===ch.doc.id)) return;
+      const d = ch.doc.data();
+      ALL_REVIEWS.unshift({
+        _fbId:ch.doc.id, id:ch.doc.id, name:d.name||'Anonymous', avatar:'👤',
+        rating:d.rating||3, date:d.date||'', variation:d.variation||'',
+        text:d.text||'', helpful:0, reply:null, isNew:false
+      });
+    });
+    const fb=ALL_REVIEWS.filter(r=>r._fbId), seed=ALL_REVIEWS.filter(r=>!r._fbId);
+    ALL_REVIEWS.length=0; ALL_REVIEWS.push(...fb,...seed);
+    renderReviews(currentFilter);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderReviews('all');
+  let tries=0;
+  const poll=setInterval(()=>{
+    tries++;
+    if(window._fbReady){ clearInterval(poll); startFirebaseListener(); }
+    else if(tries>50) clearInterval(poll);
+  }, 100);
+});
+</script>
+</body>
+</html>
