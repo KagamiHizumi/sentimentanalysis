@@ -47,7 +47,7 @@ html{font-size:16px}
 body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
 
 /* ── Sidebar layout ── */
-.layout{display:flex;min-height:100vh}
+.layout{display:flex;height:100vh;overflow:hidden}
 
 /* Sidebar */
 .sidebar{
@@ -56,8 +56,9 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min
   border-right:1px solid var(--lav2);
   display:flex;flex-direction:column;
   padding:32px 0;
-  position:sticky;top:0;height:100vh;
+  height:100vh;
   overflow-y:auto;
+  flex-shrink:0;
 }
 .sb-brand{padding:0 24px 32px;border-bottom:1px solid var(--lav2)}
 .sb-logo{
@@ -110,7 +111,7 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min
 .sb-product-link:hover{opacity:.7;text-decoration:underline}
 
 /* ── Main ── */
-.main{flex:1;padding:40px;overflow-y:auto;overflow-x:hidden;height:100vh}
+.main{flex:1;padding:40px;overflow-y:auto;overflow-x:hidden}
 
 /* Sync banner */
 .sync-bar{
@@ -550,8 +551,10 @@ function agg(){
   });
   var n=reviews.length;
   var dom=Object.keys(dist).sort(function(a,b){return dist[b]-dist[a]})[0];
+  var dimsAvg={};
+  Object.entries(dims).forEach(function(e){dimsAvg[e[0]]=Math.round(e[1]/n)});
   return{n:n,dist:dist,dom:dom,avgS:(ss/n).toFixed(1),churn:ch,esc:es,
-    dims:Object.fromEntries(Object.entries(dims).map(function(e){return[e[0],Math.round(e[1]/n)]})),
+    dims:dimsAvg,
     topC:Object.entries(cc).sort(function(a,b){return b[1]-a[1]}).slice(0,8),
     topK:Object.entries(kc).sort(function(a,b){return b[1]-a[1]}).slice(0,12)};
 }
