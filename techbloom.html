@@ -110,7 +110,7 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min
 .sb-product-link:hover{opacity:.7;text-decoration:underline}
 
 /* ── Main ── */
-.main{flex:1;padding:40px;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+.main{flex:1;padding:40px;overflow-y:auto;overflow-x:hidden;height:100vh}
 
 /* Sync banner */
 .sync-bar{
@@ -706,25 +706,32 @@ function updateCharts(g){
 function navTo(section, btn){
   document.querySelectorAll('.sb-link').forEach(function(b){b.classList.remove('active')});
   if(btn) btn.classList.add('active');
+
   var targets={overview:'sec-overview',analytics:'sec-analytics',reviews:'sec-reviews',submit:'sec-submit',churn:'sec-reviews',escalations:'sec-reviews'};
-  var el=document.getElementById(targets[section]);
+  var elId=targets[section];
+  var el=document.getElementById(elId);
   var mainEl=document.querySelector('.main');
+
   if(el && mainEl){
-    var offset=el.offsetTop - mainEl.offsetTop - 16;
-    mainEl.scrollTo({top:offset,behavior:'smooth'});
+    // Get position of element relative to the scrollable main container
+    var elRect=el.getBoundingClientRect();
+    var mainRect=mainEl.getBoundingClientRect();
+    var scrollTarget=mainEl.scrollTop + (elRect.top - mainRect.top) - 16;
+    mainEl.scrollTop=scrollTarget;
   }
+
   if(section==='churn'){
     setTimeout(function(){
       var rows=reviews.filter(function(r){return r.analyzed.churn});
       document.getElementById('tbody').innerHTML=renderRows(rows);
       document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
-    },400);
+    },100);
   } else if(section==='escalations'){
     setTimeout(function(){
       var rows=reviews.filter(function(r){return r.analyzed.esc});
       document.getElementById('tbody').innerHTML=renderRows(rows);
       document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
-    },400);
+    },100);
   }
 }
 
