@@ -47,6 +47,855 @@ html{font-size:16px}
 body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
 
 /* ── Sidebar layout ── */
+.layout{display:flex;height:100vh;overflow:hidden}
+
+/* Sidebar */
+.sidebar{
+  width:240px;min-width:240px;
+  background:var(--lav);
+  border-right:1px solid var(--lav2);
+  display:flex;flex-direction:column;
+  padding:32px 0;
+  position:sticky;top:0;height:100vh;
+  overflow-y:auto;
+}
+.sb-brand{padding:0 24px 32px;border-bottom:1px solid var(--lav2)}
+.sb-logo{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,var(--lav3),var(--blush2));
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:10px;
+  box-shadow:0 4px 12px rgba(91,63,160,0.18);
+}
+.sb-name{font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);line-height:1.1}
+.sb-name em{color:var(--lav-ink);font-style:italic}
+.sb-sub{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500;letter-spacing:0.5px}
+
+.sb-section{padding:20px 24px 8px;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--lav3)}
+.sb-link{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 24px;
+  font-size:13px;font-weight:500;color:var(--ink2);
+  cursor:pointer;transition:all 0.15s;
+  border-left:3px solid transparent;
+}
+.sb-link:hover{background:var(--lav2);color:var(--lav-ink)}
+.sb-link.active{background:var(--white);color:var(--lav-ink);border-left-color:var(--lav-ink)}
+.sb-icon{font-size:15px;width:20px;text-align:center}
+
+.sb-footer{margin-top:auto;padding:20px 24px;border-top:1px solid var(--lav2)}
+.sb-product-chip{
+  background:var(--white);
+  border:1px solid var(--lav2);
+  border-radius:10px;padding:10px 12px;
+}
+.sb-product-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.sb-product-name{font-size:12px;font-weight:600;color:var(--ink)}
+.live-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--mint);border:1px solid var(--mint2);
+  border-radius:100px;padding:3px 8px;
+  font-size:10px;font-weight:600;color:var(--mint-ink);
+  margin-top:6px;
+}
+.live-dot{width:5px;height:5px;background:var(--mint-ink);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sb-product-link{
+  display:inline-block;margin-top:8px;
+  font-size:10px;font-weight:600;
+  color:var(--lav-ink);text-decoration:none;
+  letter-spacing:0.3px;
+  transition:opacity .15s;
+}
+.sb-product-link:hover{opacity:.7;text-decoration:underline}
+
+/* ── Main ── */
+.main{flex:1;height:100vh;padding:40px;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+
+/* Sync banner */
+.sync-bar{
+  background:var(--mint);border:1px solid var(--mint2);
+  border-radius:10px;padding:10px 16px;
+  font-size:12px;font-weight:500;color:var(--mint-ink);
+  display:none;align-items:center;gap:8px;margin-bottom:24px;
+}
+.sync-bar.show{display:flex}
+
+/* Page title */
+.page-header{margin-bottom:32px}
+.page-title{font-family:'Playfair Display',serif;font-size:32px;color:var(--ink);margin-bottom:4px}
+.page-title em{color:var(--lav-ink);font-style:italic}
+.page-sub{font-size:13px;color:var(--muted)}
+
+/* ── KPI strip ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:28px}
+.kpi{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:var(--r);padding:20px;
+  box-shadow:var(--shadow);transition:all 0.2s;
+  position:relative;overflow:hidden;
+}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi:nth-child(1)::before{background:linear-gradient(90deg,var(--lav3),var(--blush2))}
+.kpi:nth-child(2)::before{background:linear-gradient(90deg,var(--lav-ink),var(--lav3))}
+.kpi:nth-child(3)::before{background:linear-gradient(90deg,var(--blush2),var(--blush-ink))}
+.kpi:nth-child(4)::before{background:linear-gradient(90deg,var(--mint2),var(--mint-ink))}
+.kpi:nth-child(5)::before{background:linear-gradient(90deg,#f5c2d0,#b0364e)}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-h)}
+.kpi-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.kpi-val{font-family:'Playfair Display',serif;font-size:34px;line-height:1;color:var(--ink);margin-bottom:4px}
+.kpi-hint{font-size:11px;color:var(--muted)}
+.kpi-lav{color:var(--lav-ink)}
+.kpi-mint{color:var(--mint-ink)}
+.kpi-blush{color:var(--blush-ink)}
+
+/* ── Sentiment ribbon ── */
+.ribbon-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;box-shadow:var(--shadow);margin-bottom:24px}
+.ribbon-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.ribbon{display:flex;height:10px;border-radius:100px;overflow:hidden;gap:3px;margin-bottom:14px}
+.ribbon-seg{border-radius:100px;transition:flex .6s ease}
+.ribbon-seg.positive{background:var(--mint-ink)}
+.ribbon-seg.negative{background:var(--blush-ink)}
+.ribbon-seg.neutral{background:var(--lav-ink)}
+.ribbon-seg.mixed{background:#b06d1a}
+.ribbon-legend{display:flex;gap:18px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--ink2)}
+.leg-dot{width:9px;height:9px;border-radius:50%}
+
+/* ── Alert pills ── */
+.alert-row{display:flex;gap:14px;margin-bottom:24px}
+.alert-pill{
+  flex:1;border-radius:var(--r);padding:18px 22px;
+  display:flex;align-items:center;gap:16px;border:1px solid;
+}
+.alert-pill.churn{background:var(--blush);border-color:var(--blush2)}
+.alert-pill.esc{background:#fff8e6;border-color:#fde68a}
+.alert-num{font-family:'Playfair Display',serif;font-size:44px;line-height:1}
+.alert-pill.churn .alert-num{color:var(--blush-ink)}
+.alert-pill.esc   .alert-num{color:#b45309}
+.alert-info{}
+.alert-title{font-weight:600;font-size:14px;margin-bottom:3px}
+.alert-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* ── Grid layouts ── */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.grid2col{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:24px}
+
+/* ── Card ── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;box-shadow:var(--shadow);transition:box-shadow .2s}
+.card:hover{box-shadow:var(--shadow-h)}
+.card-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.chart-wrap{position:relative;width:100%;overflow:hidden}
+.chart-wrap canvas{max-width:100%!important;height:auto!important;display:block}
+.chart-fixed{position:relative;width:100%;height:260px;overflow:hidden;contain:strict}
+.chart-fixed canvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important}
+
+/* ── Word cloud ── */
+.wcloud{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:12px 8px;min-height:150px}
+.wc-w{cursor:default;line-height:1.2;transition:opacity .2s,transform .2s;font-family:'Playfair Display',serif}
+.wc-w:hover{opacity:.65;transform:scale(1.08)}
+
+/* ── Dims ── */
+.dim-row{margin-bottom:14px}
+.dim-row:last-child{margin-bottom:0}
+.dim-top{display:flex;justify-content:space-between;margin-bottom:5px}
+.dim-name{font-size:12px;font-weight:500;color:var(--ink2);text-transform:capitalize}
+.dim-score{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500}
+.dim-track{height:5px;background:var(--lav);border-radius:100px;overflow:hidden}
+.dim-fill{height:100%;border-radius:100px;transition:width .8s cubic-bezier(.34,1.56,.64,1)}
+
+/* ── Tags ── */
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-size:11px;font-weight:500;padding:4px 11px;border-radius:100px;letter-spacing:.2px}
+.tag.cat{background:var(--lav);color:var(--lav-ink);border:1px solid var(--lav2)}
+.tag.kw{background:var(--mint);color:var(--mint-ink);border:1px solid var(--mint2)}
+
+/* ── Section heading ── */
+.section-head{
+  display:flex;align-items:center;gap:10px;
+  font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:16px;
+}
+.section-head::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── Table ── */
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.ftab{
+  font-size:11px;font-weight:500;padding:6px 14px;
+  border-radius:100px;border:1px solid var(--lav2);
+  background:var(--white);color:var(--muted);cursor:pointer;transition:all .15s;
+}
+.ftab:hover{border-color:var(--lav-ink);color:var(--lav-ink)}
+.ftab.active{background:var(--lav-ink);border-color:var(--lav-ink);color:var(--white)}
+.tbl-wrap{border-radius:12px;border:1px solid var(--border);overflow:hidden;background:var(--white)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{background:var(--lav)}
+th{padding:10px 14px;text-align:left;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--lav2)}
+td{padding:12px 14px;border-bottom:1px solid var(--cream);color:var(--ink2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fdfaff}
+tr.new-r td{background:var(--mint)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px}
+.badge.positive{background:var(--mint);color:var(--mint-ink)}
+.badge.negative{background:var(--blush);color:var(--blush-ink)}
+.badge.neutral{background:var(--lav);color:var(--lav-ink)}
+.badge.mixed{background:#fef3c7;color:#b45309}
+.stars-txt{color:#e8a000;font-size:11px;letter-spacing:1px}
+.cat-chip{display:inline-block;font-size:9px;background:var(--lav);color:var(--lav-ink);padding:2px 6px;border-radius:4px;margin-right:3px;border:1px solid var(--lav2)}
+
+/* ── Submit form ── */
+.form-section{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:32px;box-shadow:var(--shadow);margin-bottom:48px}
+.form-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--ink);margin-bottom:6px}
+.form-title em{color:var(--lav-ink);font-style:italic}
+.form-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fl{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.fi,.fs{padding:10px 14px;border:1.5px solid var(--lav2);border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;transition:border-color .15s,box-shadow .15s}
+.fi:focus,.fs:focus{border-color:var(--lav-ink);box-shadow:0 0 0 3px var(--lav)}
+.fta{padding:12px 14px;border:1.5px solid var(--lav2);border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;resize:vertical;min-height:96px;width:100%;transition:border-color .15s,box-shadow .15s}
+.fta:focus{border-color:var(--lav-ink);box-shadow:0 0 0 3px var(--lav)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.star-btns{display:flex;gap:6px}
+.sb{width:32px;height:32px;border:1.5px solid var(--lav2);border-radius:8px;background:var(--cream);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .12s;color:var(--lav2)}
+.sb.on{background:var(--blush);border-color:#f5a0b5;color:#e8314c}
+.sb:hover{border-color:#f5a0b5;color:#e8314c}
+.sub-row{display:flex;align-items:center;gap:14px;margin-top:16px}
+.sub-btn{
+  padding:12px 28px;
+  background:linear-gradient(135deg,var(--lav-ink),var(--lav3));
+  color:var(--white);border:none;border-radius:10px;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:opacity .15s,transform .1s;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 4px 14px rgba(91,63,160,0.28);
+}
+.sub-btn:hover:not(:disabled){opacity:.88;transform:translateY(-1px)}
+.sub-btn:disabled{opacity:.55;cursor:not-allowed}
+.sub-note{font-size:12px;color:var(--blush-ink)}
+.sub-ok{font-size:13px;color:var(--mint-ink);font-weight:500;display:none;margin-top:10px}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:14px 20px;border-radius:12px;box-shadow:0 8px 32px rgba(45,38,64,.22);font-size:12px;max-width:300px;opacity:0;transform:translateY(10px);transition:all .3s;z-index:999;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.t-title{font-weight:600;font-size:13px;margin-bottom:3px}
+.t-body{opacity:.65}
+
+/* ── Responsive ── */
+@media(max-width:1100px){.grid3{grid-template-columns:1fr 1fr}.kpi-strip{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:860px){.layout{flex-direction:column;height:auto;overflow:visible}.sidebar{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap;padding:16px}.main{height:auto;overflow-y:visible;padding:20px}.grid3,.grid2,.grid2col{grid-template-columns:1fr}.kpi-strip{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">🌸</div>
+    <div class="sb-name">Tech<em>Bloom</em></div>
+    <div class="sb-sub">Sentiment Intelligence</div>
+  </div>
+  <div class="sb-section">Dashboard</div>
+  <div class="sb-link active" onclick="navTo('overview',this)"><span class="sb-icon">✦</span> Overview</div>
+  <div class="sb-link" onclick="navTo('analytics',this)"><span class="sb-icon">📊</span> Analytics</div>
+  <div class="sb-link" onclick="navTo('reviews',this)"><span class="sb-icon">💬</span> Reviews</div>
+  <div class="sb-link" onclick="navTo('submit',this)"><span class="sb-icon">✍️</span> Submit</div>
+  <div class="sb-section">Reports</div>
+  <div class="sb-link" onclick="navTo('churn',this)"><span class="sb-icon">⚠️</span> Churn Risk</div>
+  <div class="sb-link" onclick="navTo('escalations',this)"><span class="sb-icon">🚨</span> Escalations</div>
+  <div class="sb-footer">
+    <div class="sb-product-chip">
+      <div class="sb-product-label">Reviewing</div>
+      <div class="sb-product-name">AuraPro Laptop X7</div>
+      <div class="live-pill"><div class="live-dot"></div>Live Sync</div>
+      <a href="auropro_product.html" target="_blank" class="sb-product-link">View Product Page ↗</a>
+    </div>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main" id="mainScroll">
+
+  <!-- Sync bar -->
+  <div class="sync-bar" id="syncBar">🌿 <span id="syncText"></span></div>
+
+  <!-- Page header -->
+  <div class="page-header" id="sec-overview">
+    <div class="page-title">AuraPro <em>Laptop X7</em></div>
+    <div class="page-sub">Real-time sentiment analysis · VADER + TextBlob ensemble · <span id="totalCount">20</span> reviews analyzed</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-strip">
+    <div class="kpi"><div class="kpi-label">Total Reviews</div><div class="kpi-val kpi-lav" id="vTotal">—</div><div class="kpi-hint">all sources</div></div>
+    <div class="kpi"><div class="kpi-label">Dominant Mood</div><div class="kpi-val" id="vDom">—</div><div class="kpi-hint" id="vDomH">—</div></div>
+    <div class="kpi"><div class="kpi-label">Avg Stars</div><div class="kpi-val" id="vStars">—</div><div class="kpi-hint">out of 5.0</div></div>
+    <div class="kpi"><div class="kpi-label">Positive</div><div class="kpi-val kpi-mint" id="vPos">—</div><div class="kpi-hint" id="vPosH">—</div></div>
+    <div class="kpi"><div class="kpi-label">Negative</div><div class="kpi-val kpi-blush" id="vNeg">—</div><div class="kpi-hint" id="vNegH">—</div></div>
+  </div>
+
+  <!-- Ribbon -->
+  <div class="ribbon-card">
+    <div class="ribbon-label">Sentiment Breakdown</div>
+    <div class="ribbon" id="ribbon"></div>
+    <div class="ribbon-legend" id="ribbonLeg"></div>
+  </div>
+
+  <!-- Alerts -->
+  <div class="alert-row">
+    <div class="alert-pill churn">
+      <div class="alert-num" id="vChurn">0</div>
+      <div class="alert-info"><div class="alert-title">💔 Churn Risk</div><div class="alert-desc">Users likely to switch brands. Priority follow-up needed.</div></div>
+    </div>
+    <div class="alert-pill esc">
+      <div class="alert-num" id="vEsc">0</div>
+      <div class="alert-info"><div class="alert-title">🔔 Escalation Required</div><div class="alert-desc">Legal / fraud signals detected. Flag for management.</div></div>
+    </div>
+  </div>
+
+  <!-- Analytics section -->
+  <div class="section-head" id="sec-analytics">Analytics</div>
+  <div class="grid3" style="margin-bottom:16px">
+    <div class="card"><div class="card-label">Sentiment Split</div><div class="chart-wrap"><canvas id="donutC"></canvas></div></div>
+    <div class="card"><div class="card-label">Star Distribution</div><div class="chart-wrap"><canvas id="barC"></canvas></div></div>
+    <div class="card"><div class="card-label">Sentiment × Stars</div><div class="chart-wrap"><canvas id="stackC"></canvas></div></div>
+  </div>
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card" style="min-height:320px"><div class="card-label">Rating vs VADER Compound</div><div class="chart-fixed"><canvas id="scatC"></canvas></div></div>
+    <div class="card" style="min-height:320px"><div class="card-label">Compound Score per Review</div><div class="chart-fixed"><canvas id="compC"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-bottom:24px">
+    <div class="card-label">Positive Review Word Cloud</div>
+    <div class="wcloud" id="wcloud"></div>
+  </div>
+
+  <!-- Dims + tags -->
+  <div class="grid2col" style="margin-bottom:24px">
+    <div class="card"><div class="card-label">Dimension Scores</div><div id="dimArea"></div></div>
+    <div class="card">
+      <div class="card-label">Categories</div>
+      <div class="tags" id="catArea" style="margin-bottom:14px"></div>
+      <div class="card-label" style="margin-top:10px">Keywords</div>
+      <div class="tags" id="kwArea"></div>
+    </div>
+  </div>
+
+  <!-- Reviews table -->
+  <div class="section-head" id="sec-reviews">Reviews</div>
+  <div class="filter-row">
+    <button class="ftab active" onclick="filt('all',this)">All</button>
+    <button class="ftab" onclick="filt('positive',this)">🌿 Positive</button>
+    <button class="ftab" onclick="filt('negative',this)">🌸 Negative</button>
+    <button class="ftab" onclick="filt('neutral',this)">💜 Neutral</button>
+    <button class="ftab" onclick="filt('mixed',this)">🎀 Mixed</button>
+  </div>
+  <div class="tbl-wrap" style="margin-bottom:32px">
+    <table>
+      <thead><tr>
+        <th>Sentiment</th><th>Stars</th><th>Conf.</th>
+        <th>Reviewer</th><th>Review</th><th>Category</th><th>Intent</th><th>Date</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Submit -->
+  <div class="form-section" id="sec-submit">
+    <div class="form-title">Share Your <em>Experience</em></div>
+    <div class="form-sub">Write a review for the AuraPro Laptop X7 — it'll be analyzed instantly and update the dashboard live.</div>
+    <div class="form-grid">
+      <div class="fg"><label class="fl">Your Name</label><input class="fi" id="iName" placeholder="e.g. Jamie L."/></div>
+      <div class="fg"><label class="fl">Model Variant</label>
+        <select class="fs" id="iVar">
+          <option>AuraPro X7 — Core i7</option>
+          <option>AuraPro X7 — Ryzen 9</option>
+          <option>AuraPro X7 Max — M3</option>
+          <option>AuraPro X7 Lite</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Star Rating</label>
+        <div class="star-btns" id="starBtns">
+          <button class="sb" onclick="setStar(1)">★</button>
+          <button class="sb" onclick="setStar(2)">★</button>
+          <button class="sb" onclick="setStar(3)">★</button>
+          <button class="sb" onclick="setStar(4)">★</button>
+          <button class="sb" onclick="setStar(5)">★</button>
+        </div>
+      </div>
+    </div>
+    <div class="fg" style="margin-bottom:0">
+      <label class="fl">Your Review</label>
+      <textarea class="fta" id="iText" placeholder="Tell us about battery life, performance, display, build quality, keyboard, software…"></textarea>
+    </div>
+    <div class="sub-row">
+      <button class="sub-btn" id="subBtn" onclick="submitReview()"><span id="btnTxt">✦ Analyze & Submit</span></button>
+      <span class="sub-note" id="subNote"></span>
+    </div>
+    <div class="sub-ok" id="subOk"></div>
+  </div>
+
+</main>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><div class="t-title" id="tTitle"></div><div class="t-body" id="tBody"></div></div>
+
+<script>
+// ─── VADER lexicons ───────────────────────────────────────────────────────────
+var POS=new Set(['good','great','excellent','amazing','fantastic','wonderful','awesome','love','best','perfect','beautiful','nice','happy','glad','pleased','satisfied','recommend','impressive','quality','fast','quick','clean','clear','solid','smooth','comfortable','easy','helpful','enjoy','enjoyed','worth','value','genuine','original','real','reliable','durable','strong','powerful','fresh','innovative','professional','efficient','brilliant','outstanding','superb','magnificent','delightful','safe','secure','effective','responsive','accurate','honest','fair','kind','generous','friendly','crisp','sharp','vivid','bright','stunning','gorgeous','sleek','premium','exceptional','incredible','snappy','fluid','silent','cool','thin','light','compact','ergonomic','comfortable','grip','fast','quiet','efficient','silent','portable','lightweight','elegant','refined']);
+var NEG=new Set(['bad','terrible','awful','horrible','worst','hate','poor','disappointed','fake','broken','defective','scam','fraud','slow','late','damaged','missing','wrong','incorrect','false','lie','lied','useless','waste','overpriced','cheap','flimsy','ugly','loud','uncomfortable','difficult','hard','confusing','annoying','frustrating','rude','ignored','unresponsive','refused','denied','blocked','stuck','static','noise','crackling','lagging','disconnects','dies','stopped','avoid','warning','danger','illegal','stolen','lawsuit','complaint','report','dispute','refund','return','problem','issue','error','fault','fail','failed','never','nothing','worthless','regret','sorry','glitch','crash','overheat','hot','burn','bloatware','ads','buggy','unstable','fragile','scratch','shatter','bend','creak','wobble','dim','washed','blurry','grainy','throttle','throttling','stutter','choppy','freezes','frozen']);
+var INTENS=new Set(['very','extremely','super','really','absolutely','completely','totally','so','quite','highly','incredibly','utterly']);
+var NEGS=new Set(['not','no','never','nothing','nobody','nowhere','neither','nor','cannot','cant',"can't","won't","wouldn't","didn't","doesn't","don't","isn't","wasn't","aren't"]);
+var CHURN=['never again',"won't buy",'will not return','last time','never buying','do not buy','avoid','returning this','switched brands'];
+var ESC=['lawsuit','legal action','bbb','dti','report','fraud','scam','counterfeit','fake item','complaint','authorities','consumer protection'];
+var CATS={
+  'Performance':['processor','cpu','gpu','chip','speed','ram','memory','benchmark','fps','gaming','render','compile','lag','smooth','fast','slow','performance','throttle','thermal'],
+  'Battery':['battery','charge','charging','drain','life','hours','mah','wireless','power','watt','adapter','plugged'],
+  'Display':['display','screen','panel','resolution','brightness','hdr','refresh','hz','glossy','matte','ips','oled','sharp','vivid','color','accurate'],
+  'Build Quality':['build','chassis','keyboard','trackpad','hinge','lid','aluminum','magnesium','plastic','weight','heavy','light','portable','thin','slim','premium','feel','grip','sturdy','flex','creak'],
+  'Thermals':['heat','hot','warm','thermal','fan','noise','cooling','throttle','temperature','vent'],
+  'Software':['windows','macos','linux','bios','driver','bloatware','update','os','software','app','feature','bug','glitch','crash','stable','unstable'],
+  'Ports & IO':['port','usb','hdmi','thunderbolt','sdcard','audio','headphone','jack','wifi','bluetooth','webcam','camera'],
+  'Pricing':['price','value','expensive','cheap','worth','cost','affordable','overpriced','budget','deal','money','refund'],
+};
+var COLORS={positive:'#1a7a52',negative:'#b0364e',neutral:'#5b3fa0',mixed:'#b06d1a'};
+
+// ─── Seed reviews ─────────────────────────────────────────────────────────────
+var SEED=[
+  {name:"Alicia R.",  rating:5,date:"2025-05-01",variation:"AuraPro X7 — Core i7",   text:"Absolutely in love with this laptop. The build quality is stunning — aluminum chassis with no flex whatsoever. Performance is incredible for both creative work and gaming. The display colors are vivid and accurate, perfect for photo editing. Battery lasts 11 hours on light use. Best laptop I've ever owned."},
+  {name:"Brandon K.", rating:1,date:"2025-04-28",variation:"AuraPro X7 — Ryzen 9",   text:"Terrible thermal management. The laptop throttles aggressively under load and the fans are unbearably loud. Gets dangerously hot near the keyboard area. Customer support refused a refund and ignored my complaint for 3 weeks. I am filing a report with consumer protection. Do not buy."},
+  {name:"Clara M.",   rating:5,date:"2025-04-25",variation:"AuraPro X7 Max — M3",    text:"This machine is a powerhouse. Silently handles video editing, 3D rendering, and gaming without breaking a sweat. The M3 chip efficiency is outstanding — battery life is genuinely all-day. The display is gorgeous, best I've ever used. Thin, light, premium. Highly recommend."},
+  {name:"Derek S.",   rating:2,date:"2025-04-22",variation:"AuraPro X7 Lite",         text:"Disappointed with the build quality on the Lite model. The plastic chassis creaks and the hinge feels loose after a month. Trackpad is unresponsive sometimes. Software is full of bloatware. For the price I expected much better. Won't be buying from this brand again."},
+  {name:"Evelyn T.",  rating:5,date:"2025-04-19",variation:"AuraPro X7 — Core i7",   text:"Phenomenal laptop. The keyboard is the best I've typed on — firm, tactile, backlit perfectly. Display is bright and sharp even in direct sunlight. Runs cool and quiet under moderate loads. Ports are excellent: USB-C Thunderbolt, HDMI, SD card. Worth every penny."},
+  {name:"Felix H.",   rating:3,date:"2025-04-16",variation:"AuraPro X7 — Ryzen 9",   text:"Mixed feelings. Performance is great and the display is gorgeous. But the thermal solution lets it down — gets warm during sustained workloads and the fan noise is noticeable. Battery life is just average for this class. Good laptop but not exceptional given the price tag."},
+  {name:"Grace O.",   rating:1,date:"2025-04-13",variation:"AuraPro X7 Max — M3",    text:"Received a unit with dead pixels right out of the box. Seller refuses to acknowledge the defect. I have already initiated a credit card dispute and will escalate to a formal complaint if unresolved. This is completely unacceptable at this price. Scam product. Avoid."},
+  {name:"Henry J.",   rating:4,date:"2025-04-10",variation:"AuraPro X7 — Core i7",   text:"Really solid workhorse. Performance handles my development environment, Docker, and multiple VMs without complaint. Display is accurate and comfortable for long coding sessions. My only gripe is the webcam quality — it's just okay. Build is premium and feels great. Would recommend."},
+  {name:"Isabel N.",  rating:5,date:"2025-04-07",variation:"AuraPro X7 — Ryzen 9",   text:"Absolute dream laptop for video editing. Renders faster than my old desktop. The display with HDR support is breathtaking — colors pop beautifully. Fanless under light loads. Arrived well packaged, fast shipping. The best investment I've made for my creative workflow."},
+  {name:"James P.",   rating:2,date:"2025-04-04",variation:"AuraPro X7 Lite",         text:"Battery life is far worse than advertised. They claim 12 hours but I barely get 5 on brightness settings. The display has a slight pink tint I can't calibrate away. For a premium priced laptop these are unacceptable flaws. Customer support was helpful but couldn't resolve my issues."},
+  {name:"Karen L.",   rating:5,date:"2025-04-01",variation:"AuraPro X7 Max — M3",    text:"The M3 variant is just extraordinary. Blazing fast, completely silent, runs cool all day. Battery is exceptional — 14 hours with mixed workloads. The slim design is elegant without sacrificing port selection. The display calibration out of the box is flawless. Zero regrets."},
+  {name:"Leo W.",     rating:4,date:"2025-03-28",variation:"AuraPro X7 — Core i7",   text:"Great laptop overall. Boots in seconds, handles multitasking beautifully. Build quality feels premium and solid. The trackpad is smooth and precise — best Windows trackpad I've used. Minor issue: USB-A port placement is awkward. Battery lasts a full workday easily. Happy with the purchase."},
+  {name:"Maya D.",    rating:1,date:"2025-03-25",variation:"AuraPro X7 — Ryzen 9",   text:"Screen flickered and died after 6 weeks. No physical damage whatsoever. Warranty claim denied because they claim liquid damage which is impossible — I've never had liquid near this laptop. This is fraudulent warranty denial. I am pursuing legal action and filed a BBB complaint."},
+  {name:"Nathan B.",  rating:5,date:"2025-03-22",variation:"AuraPro X7 — Core i7",   text:"Switched from a competitor and I am blown away. Keyboard is superb, trackpad is buttery smooth, display is vivid and bright. Performance is reliable and consistent — no throttling even after extended gaming sessions. The cooling system is genuinely impressive. Exceptional laptop."},
+  {name:"Olivia C.",  rating:3,date:"2025-03-19",variation:"AuraPro X7 Lite",         text:"Decent budget option with some trade-offs. The display is good but not great — viewing angles could be better. Build quality is acceptable if slightly plasticky. Performance is adequate for everyday tasks. Battery life is honest at around 7 hours. Delivered on time, well packaged."},
+  {name:"Patrick G.", rating:5,date:"2025-03-16",variation:"AuraPro X7 Max — M3",    text:"This laptop redefined my expectations. Completely silent operation even under heavy workloads. The display is the best panel I've ever seen on a laptop — brilliant HDR, perfect colors. Thin and light enough to take everywhere. Fast charging from 0-80% in 45 minutes. Outstanding."},
+  {name:"Quinn F.",   rating:2,date:"2025-03-13",variation:"AuraPro X7 — Ryzen 9",   text:"Severe thermal throttling issues. Gaming performance drops 40% after 10 minutes as the CPU throttles to manage heat. The chassis around the keyboard gets uncomfortably hot. For a gaming laptop this is disqualifying. Very disappointed given the price. Not recommended for sustained workloads."},
+  {name:"Rachel T.",  rating:5,date:"2025-03-10",variation:"AuraPro X7 — Core i7",   text:"Perfect laptop for my needs as a designer. Color accuracy on the display is exceptional — P3 wide gamut coverage. Fast enough for Illustrator, Photoshop, and light video work simultaneously. Keyboard feedback is satisfying. Build quality is refined and premium. Genuinely happy."},
+  {name:"Sam K.",     rating:1,date:"2025-03-07",variation:"AuraPro X7 Lite",         text:"Worst laptop I've ever purchased. Hinge broke on its own after 2 months. Seller insisting it's physical damage and refusing warranty repair. Completely dishonest business practices. Never buying from this company again. Avoid at all costs. Already warned everyone I know."},
+  {name:"Tina R.",    rating:4,date:"2025-03-04",variation:"AuraPro X7 Max — M3",    text:"Very happy overall. Performance is top class and completely silent — remarkable engineering. Battery life truly delivers on the promises. The display is gorgeous. Only minor complaint is limited port selection on the base model — needed a hub. Highly recommend for professionals."},
+];
+
+var reviews=SEED.map(function(r,i){return Object.assign({},r,{analyzed:analyze(r.text,r.rating),isNew:false,_id:'s'+i})});
+var currFilt='all', selStar=0;
+var charts={};
+
+// ─── Analyzer ─────────────────────────────────────────────────────────────────
+function analyze(text,stars){
+  stars=stars||0;
+  var words=text.toLowerCase().replace(/[^a-z0-9\s']/g,' ').split(/\s+/).filter(Boolean);
+  var pos=0,neg=0,pneg=false;
+  for(var i=0;i<words.length;i++){
+    var w=words[i],m=INTENS.has(words[i-1])?1.5:1;
+    if(NEGS.has(w)){pneg=true;continue}
+    if(POS.has(w)){pneg?neg+=.8*m:pos+=1*m}
+    else if(NEG.has(w)){pneg?pos+=.5*m:neg+=1*m}
+    pneg=false;
+  }
+  var ex=(text.match(/!/g)||[]).length;
+  if(pos>neg)pos+=ex*.3;else neg+=ex*.3;
+  var tot=pos+neg;
+  var vc=tot===0?0:(pos-neg)/Math.max(tot,1);
+  var sv=stars>0?(stars-3)/2:0;
+  var ens=Math.max(-1,Math.min(1,.65*vc+.35*sv));
+  var dis=(vc>.2&&sv<-.3)||(vc<-.2&&sv>.3);
+  var sent,emoji,conf;
+  if(dis){sent='mixed';emoji='🎀';conf=Math.round(50+Math.abs(ens)*25)}
+  else if(ens>=.15){sent='positive';emoji='🌿';conf=Math.round(Math.min(98,55+ens*43))}
+  else if(ens<=-.15){sent='negative';emoji='🌸';conf=Math.round(Math.min(98,55+Math.abs(ens)*43))}
+  else{sent='neutral';emoji='💜';conf=Math.round(55+(0.15-Math.abs(ens))/.15*20)}
+  var tl=text.toLowerCase();
+  var churn=CHURN.some(function(s){return tl.includes(s)});
+  var esc=ESC.some(function(s){return tl.includes(s)});
+  var urgW=['immediately','asap','urgent','still waiting','unacceptable','weeks'];
+  var urg=Math.min(100,urgW.filter(function(w){return tl.includes(w)}).length*20+(stars<=1?25:0));
+  var frust=Math.round(Math.max(0,Math.min(100,(-vc+1)/2*100)));
+  var sat=Math.round(Math.max(0,Math.min(100,(vc+1)/2*100)));
+  var lr=Math.min(100,(churn?50:0)+(esc?40:0)+(stars<=2?25:0));
+  var cats=Object.keys(CATS).filter(function(c){return CATS[c].some(function(k){return tl.includes(k)})});
+  if(!cats.length)cats=['General'];
+  var ints=[];
+  if(churn)ints.push('Churn Risk');
+  if(esc)ints.push('Escalation');
+  if(ens>.5)ints.push('Praise');
+  if(ens<-.3)ints.push('Complaint');
+  if(!ints.length)ints.push('Feedback');
+  var STOP=new Set(['the','a','an','and','or','but','in','on','at','to','for','of','with','by','is','it','this','that','was','are','be','have','had','i','my','so','very','just','also','as','if','its','me','we','our','they','you','your','all','can','no','up','about','after','more','one','from','get','been','do','did','does','really','even','than','then']);
+  var freq={};
+  text.toLowerCase().replace(/[^a-z\s]/g,'').split(/\s+/).forEach(function(w){if(w.length>3&&!STOP.has(w))freq[w]=(freq[w]||0)+1});
+  var kws=Object.keys(freq).sort(function(a,b){return freq[b]-freq[a]}).slice(0,6);
+  return{sent:sent,emoji:emoji,conf:conf,ens:parseFloat(ens.toFixed(3)),vc:parseFloat(vc.toFixed(3)),frust:frust,sat:sat,urg:urg,lr:lr,churn:churn,esc:esc,cats:cats,ints:ints,kws:kws};
+}
+
+// ─── Agg ──────────────────────────────────────────────────────────────────────
+function agg(){
+  var dist={positive:0,negative:0,neutral:0,mixed:0};
+  var dims={urgency:0,frustration:0,satisfaction:0,loyalty_risk:0};
+  var cc={},kc={},ss=0,cs=0,ch=0,es=0;
+  reviews.forEach(function(r){
+    var a=r.analyzed;
+    dist[a.sent]++;dims.urgency+=a.urg;dims.frustration+=a.frust;dims.satisfaction+=a.sat;dims.loyalty_risk+=a.lr;
+    ss+=r.rating;cs+=a.conf;if(a.churn)ch++;if(a.esc)es++;
+    a.cats.forEach(function(c){cc[c]=(cc[c]||0)+1});
+    a.kws.forEach(function(k){kc[k]=(kc[k]||0)+1});
+  });
+  var n=reviews.length;
+  var dom=Object.keys(dist).sort(function(a,b){return dist[b]-dist[a]})[0];
+  return{n:n,dist:dist,dom:dom,avgS:(ss/n).toFixed(1),churn:ch,esc:es,
+    dims:Object.fromEntries(Object.entries(dims).map(function(e){return[e[0],Math.round(e[1]/n)]})),
+    topC:Object.entries(cc).sort(function(a,b){return b[1]-a[1]}).slice(0,8),
+    topK:Object.entries(kc).sort(function(a,b){return b[1]-a[1]}).slice(0,12)};
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function pct(a,b){return b?Math.round(a/b*100):0}
+
+function renderKPIs(g){
+  document.getElementById('vTotal').textContent=g.n;
+  document.getElementById('totalCount').textContent=g.n;
+  document.getElementById('vDom').textContent=g.dom.toUpperCase();
+  document.getElementById('vDomH').textContent=g.dist[g.dom]+' reviews';
+  document.getElementById('vStars').textContent=g.avgS+' ★';
+  document.getElementById('vPos').textContent=g.dist.positive;
+  document.getElementById('vPosH').textContent=pct(g.dist.positive,g.n)+'% of total';
+  document.getElementById('vNeg').textContent=g.dist.negative;
+  document.getElementById('vNegH').textContent=pct(g.dist.negative,g.n)+'% of total';
+  document.getElementById('vChurn').textContent=g.churn;
+  document.getElementById('vEsc').textContent=g.esc;
+}
+
+function renderRibbon(dist,n){
+  var rib=document.getElementById('ribbon'),leg=document.getElementById('ribbonLeg');
+  rib.innerHTML='';leg.innerHTML='';
+  var em={positive:'🌿',negative:'🌸',neutral:'💜',mixed:'🎀'};
+  Object.entries(dist).forEach(function(e){
+    var s=e[0],v=e[1];if(!v)return;
+    var p=pct(v,n);
+    var seg=document.createElement('div');
+    seg.className='ribbon-seg '+s;seg.style.flex=p;
+    rib.appendChild(seg);
+    leg.innerHTML+=`<div class="leg-item"><div class="leg-dot" style="background:${COLORS[s]}"></div>${em[s]} ${s}: <strong>${v}</strong> (${p}%)</div>`;
+  });
+}
+
+function renderDims(dims){
+  var dc={urgency:'#b0364e',frustration:'#b06d1a',satisfaction:'#1a7a52',loyalty_risk:'#5b3fa0'};
+  document.getElementById('dimArea').innerHTML=Object.entries(dims).map(function(e){
+    var k=e[0],v=e[1];
+    return `<div class="dim-row"><div class="dim-top"><span class="dim-name">${k.replace('_',' ')}</span><span class="dim-score" style="color:${dc[k]}">${v}%</span></div><div class="dim-track"><div class="dim-fill" style="width:${v}%;background:${dc[k]}"></div></div></div>`;
+  }).join('');
+}
+
+function renderTags(g){
+  document.getElementById('catArea').innerHTML=g.topC.map(function(e){return `<span class="tag cat">${e[0]} <span style="opacity:.5">(${e[1]})</span></span>`}).join('');
+  document.getElementById('kwArea').innerHTML=g.topK.map(function(e){return `<span class="tag kw">#${e[0]}</span>`}).join('');
+}
+
+function renderTable(f){
+  currFilt=f;
+  var rows=f==='all'?reviews:reviews.filter(function(r){return r.analyzed.sent===f});
+  var st=function(n){return '★'.repeat(n)+'☆'.repeat(5-n)};
+  document.getElementById('tbody').innerHTML=rows.map(function(r){
+    var a=r.analyzed;
+    return `<tr class="${r.isNew?'new-r':''}">
+      <td><span class="badge ${a.sent}">${a.emoji} ${a.sent}</span></td>
+      <td><span class="stars-txt">${st(r.rating)}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">${a.conf}%</td>
+      <td style="white-space:nowrap;font-weight:500;font-size:12px">${r.name}</td>
+      <td style="font-size:11px;color:var(--ink2);max-width:260px">${r.text.substring(0,110)}${r.text.length>110?'…':''}</td>
+      <td>${a.cats.slice(0,2).map(function(c){return `<span class="cat-chip">${c}</span>`}).join('')}</td>
+      <td style="font-size:10px;color:var(--muted);white-space:nowrap">${a.ints[0]||'—'}</td>
+      <td style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap">${r.date}</td>
+    </tr>`;
+  }).join('');
+}
+
+function filt(f,btn){
+  document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');renderTable(f);
+}
+
+function renderWordCloud(){
+  var posR=reviews.filter(function(r){return r.analyzed.sent==='positive'});
+  var freq={};
+  var STOP=new Set(['the','a','an','and','or','but','in','on','at','to','for','of','with','by','is','it','this','that','was','are','be','have','had','i','my','so','very','just','also','as','if','its','me','we','our','they','you','your','all','can','no','up','about','after','more','one','from','get','been','do','did','does','really','even','than','then']);
+  posR.forEach(function(r){r.text.toLowerCase().replace(/[^a-z\s]/g,'').split(/\s+/).forEach(function(w){if(w.length>3&&!STOP.has(w))freq[w]=(freq[w]||0)+1})});
+  var words=Object.entries(freq).sort(function(a,b){return b[1]-a[1]}).slice(0,42);
+  var max=words.length?words[0][1]:1;
+  var lavs=['#3b1f8c','#5b3fa0','#7c5ec0','#9b82d0','#b8a9e3','#d8d0f0'];
+  var mints=['#0f5c3d','#1a7a52','#2d9e6e','#4dbb8c','#7ed4ae','#b8e4d0'];
+  var palette=[...lavs,...mints];
+  document.getElementById('wcloud').innerHTML=words.map(function(e){
+    var w=e[0],c=e[1];
+    var sz=Math.round(12+(c/max)*28);
+    var col=palette[Math.floor(Math.random()*palette.length)];
+    var rot=Math.random()>.75?'rotate(-10deg)':Math.random()>.5?'rotate(8deg)':'rotate(0)';
+    return `<span class="wc-w" style="font-size:${sz}px;color:${col};transform:${rot};display:inline-block" title="${w}: ${c}">${w}</span>`;
+  }).join('');
+}
+
+// ─── Charts ───────────────────────────────────────────────────────────────────
+function initCharts(g){
+  Chart.defaults.color='#9188a8';
+  Chart.defaults.font.family="'Inter',sans-serif";
+  var d=g.dist;
+  var bgLav='#ede9f6',gridCol='#f0ebff';
+
+  charts.donut=new Chart(document.getElementById('donutC'),{type:'doughnut',
+    data:{labels:Object.keys(d),datasets:[{data:Object.values(d),backgroundColor:Object.keys(d).map(function(s){return COLORS[s]}),borderWidth:4,borderColor:'#ffffff',hoverOffset:8}]},
+    options:{cutout:'70%',responsive:true,maintainAspectRatio:true,aspectRatio:1.6,plugins:{legend:{labels:{color:'#9188a8',font:{size:11},padding:14}}}}
+  });
+
+  var sc=[1,2,3,4,5].map(function(s){return reviews.filter(function(r){return r.rating===s}).length});
+  charts.bar=new Chart(document.getElementById('barC'),{type:'bar',
+    data:{labels:['1★','2★','3★','4★','5★'],datasets:[{data:sc,backgroundColor:['#f5c2d0','#e4b8d8','#c4b0e0','#b8e4d4','#86d4b0'],borderRadius:6,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:true,aspectRatio:1.6,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}},y:{ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}}}}
+  });
+
+  var sents=['positive','negative','neutral','mixed'];
+  charts.stacked=new Chart(document.getElementById('stackC'),{type:'bar',
+    data:{labels:['1★','2★','3★','4★','5★'],datasets:sents.map(function(s){return{label:s,data:[1,2,3,4,5].map(function(star){return reviews.filter(function(r){return r.rating===star&&r.analyzed.sent===s}).length}),backgroundColor:COLORS[s],borderRadius:2}})},
+    options:{responsive:true,maintainAspectRatio:true,aspectRatio:1.6,plugins:{legend:{labels:{color:'#9188a8',font:{size:11}}}},scales:{x:{stacked:true,ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}},y:{stacked:true,ticks:{color:'#9188a8',font:{size:11}},grid:{color:gridCol}}}}
+  });
+
+  function mkScatDS(){
+    return [{label:'Negative',s:'negative',c:'#b0364e'},{label:'Neutral',s:'neutral',c:'#5b3fa0'},{label:'Positive',s:'positive',c:'#1a7a52'},{label:'Mixed',s:'mixed',c:'#b06d1a'}]
+    .map(function(cfg){return{label:cfg.label,data:reviews.filter(function(r){return r.analyzed.sent===cfg.s}).map(function(r){return{x:r.rating,y:parseFloat(r.analyzed.vc.toFixed(3))}}),backgroundColor:cfg.c+'bb',pointRadius:8,pointHoverRadius:11}})
+    .filter(function(ds){return ds.data.length>0});
+  }
+  window._mkScatDS=mkScatDS;
+  charts.scat=new Chart(document.getElementById('scatC'),{type:'scatter',data:{datasets:mkScatDS()},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{color:'#9188a8',font:{size:11},usePointStyle:true,pointStyleWidth:10}},tooltip:{callbacks:{label:function(c){return ' Stars: '+c.parsed.x+' | Score: '+c.parsed.y}}}},
+      scales:{x:{title:{display:true,text:'Star Rating',color:'#9188a8',font:{size:11}},min:.5,max:5.5,ticks:{color:'#9188a8'},grid:{color:gridCol}},y:{title:{display:true,text:'VADER Compound',color:'#9188a8',font:{size:11}},min:-1.1,max:1.1,ticks:{color:'#9188a8'},grid:{color:gridCol}}}}
+  });
+
+  function mkCompData(){
+    return{labels:reviews.map(function(r,i){return 'R'+(i+1)}),scores:reviews.map(function(r){return parseFloat(r.analyzed.vc.toFixed(3))}),colors:reviews.map(function(r){return r.analyzed.vc>=0?'#1a7a52':'#b0364e'})};
+  }
+  window._mkCompData=mkCompData;
+  var cd=mkCompData();
+  charts.comp=new Chart(document.getElementById('compC'),{type:'bar',
+    data:{labels:cd.labels,datasets:[{label:'Compound',data:cd.scores,backgroundColor:cd.colors,borderRadius:3,barPercentage:.7}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' Score: '+c.parsed.y}}}},
+      scales:{x:{ticks:{color:'#9188a8',maxRotation:0,font:{size:9}},grid:{color:gridCol}},y:{min:-1.1,max:1.1,title:{display:true,text:'Score',color:'#9188a8',font:{size:11}},ticks:{color:'#9188a8'},grid:{color:gridCol}}}},
+    plugins:[{id:'zl',afterDraw:function(chart){var ctx2=chart.ctx,ya=chart.scales.y,xa=chart.scales.x;var y=ya.getPixelForValue(0);ctx2.save();ctx2.beginPath();ctx2.moveTo(xa.left,y);ctx2.lineTo(xa.right,y);ctx2.strokeStyle='#d8d0f0';ctx2.lineWidth=1;ctx2.setLineDash([4,4]);ctx2.stroke();ctx2.restore()}}]
+  });
+}
+
+function updateCharts(g){
+  charts.donut.data.datasets[0].data=Object.values(g.dist);charts.donut.update();
+  charts.bar.data.datasets[0].data=[1,2,3,4,5].map(function(s){return reviews.filter(function(r){return r.rating===s}).length});charts.bar.update();
+  var sents=['positive','negative','neutral','mixed'];
+  charts.stacked.data.datasets.forEach(function(ds,i){ds.data=[1,2,3,4,5].map(function(star){return reviews.filter(function(r){return r.rating===star&&r.analyzed.sent===sents[i]}).length})});charts.stacked.update();
+  if(window._mkScatDS){charts.scat.data.datasets=window._mkScatDS();charts.scat.update();}
+  if(window._mkCompData){var cd=window._mkCompData();charts.comp.data.labels=cd.labels;charts.comp.data.datasets[0].data=cd.scores;charts.comp.data.datasets[0].backgroundColor=cd.colors;charts.comp.update();}
+  renderWordCloud();
+}
+
+// ─── Sidebar navigation (FIXED) ───────────────────────────────────────────────
+function navTo(section, btn){
+  // Update active state
+  document.querySelectorAll('.sb-link').forEach(function(b){b.classList.remove('active')});
+  if(btn) btn.classList.add('active');
+
+  var mainEl = document.getElementById('mainScroll');
+
+  // Special filter actions for report tabs — set filter then scroll to reviews
+  if(section === 'churn'){
+    var churnRows = reviews.filter(function(r){return r.analyzed.churn});
+    document.getElementById('tbody').innerHTML = renderRows(churnRows);
+    document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
+    scrollToSection('sec-reviews', mainEl);
+    return;
+  }
+  if(section === 'escalations'){
+    var escRows = reviews.filter(function(r){return r.analyzed.esc});
+    document.getElementById('tbody').innerHTML = renderRows(escRows);
+    document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
+    scrollToSection('sec-reviews', mainEl);
+    return;
+  }
+
+  // Map section names to element IDs
+  var targets = {
+    overview:  'sec-overview',
+    analytics: 'sec-analytics',
+    reviews:   'sec-reviews',
+    submit:    'sec-submit',
+  };
+  scrollToSection(targets[section] || 'sec-overview', mainEl);
+}
+
+function scrollToSection(elId, mainEl){
+  var el = document.getElementById(elId);
+  if(!el || !mainEl) return;
+  var elRect = el.getBoundingClientRect();
+  var mainRect = mainEl.getBoundingClientRect();
+  mainEl.scrollTo({top: mainEl.scrollTop + (elRect.top - mainRect.top) - 24, behavior: 'smooth'});
+}
+
+function renderRows(rows){
+  var st=function(n){return '★'.repeat(n)+'☆'.repeat(5-n)};
+  return rows.map(function(r){
+    var a=r.analyzed;
+    return `<tr class="${r.isNew?'new-r':''}">
+      <td><span class="badge ${a.sent}">${a.emoji} ${a.sent}</span></td>
+      <td><span class="stars-txt">${st(r.rating)}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">${a.conf}%</td>
+      <td style="white-space:nowrap;font-weight:500;font-size:12px">${r.name}</td>
+      <td style="font-size:11px;color:var(--ink2);max-width:260px">${r.text.substring(0,110)}${r.text.length>110?'…':''}</td>
+      <td>${a.cats.slice(0,2).map(function(c){return `<span class="cat-chip">${c}</span>`}).join('')}</td>
+      <td style="font-size:10px;color:var(--muted);white-space:nowrap">${a.ints[0]||'—'}</td>
+      <td style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap">${r.date}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── Star picker ──────────────────────────────────────────────────────────────
+function setStar(n){selStar=n;document.querySelectorAll('.sb').forEach(function(b,i){b.classList.toggle('on',i<n)})}
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+function toast(title,body){
+  document.getElementById('tTitle').textContent=title;
+  document.getElementById('tBody').textContent=body;
+  var t=document.getElementById('toast');t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},4000);
+}
+
+// ─── Submit ───────────────────────────────────────────────────────────────────
+function submitReview(){
+  var name=document.getElementById('iName').value.trim()||'Anonymous';
+  var text=document.getElementById('iText').value.trim();
+  var variation=document.getElementById('iVar').value;
+  if(!text){document.getElementById('subNote').textContent='Please write your review.';return}
+  if(!selStar){document.getElementById('subNote').textContent='Please select a star rating.';return}
+  document.getElementById('subBtn').disabled=true;
+  document.getElementById('btnTxt').textContent='Analyzing…';
+  document.getElementById('subNote').textContent='';
+  setTimeout(function(){
+    var today=new Date().toISOString().slice(0,10);
+    var a=analyze(text,selStar);
+    var r={_id:'u'+Date.now(),name:name,rating:selStar,date:today,variation:variation,text:text,analyzed:a,isNew:true};
+    if(window._fbReady){
+      window._fbAdd(window._fbCol(window._fbDb,'laptop_reviews'),{name:name,rating:selStar,date:today,variation:variation,text:text,createdAt:window._fbTs()}).catch(function(e){console.error(e)});
+    }
+    reviews.unshift(r);
+    var g=agg();
+    renderKPIs(g);renderRibbon(g.dist,g.n);updateCharts(g);renderDims(g.dims);renderTags(g);renderTable(currFilt);
+    document.getElementById('iName').value='';document.getElementById('iText').value='';
+    selStar=0;document.querySelectorAll('.sb').forEach(function(b){b.classList.remove('on')});
+    document.getElementById('subBtn').disabled=false;document.getElementById('btnTxt').textContent='✦ Analyze & Submit';
+    var em={positive:'🌿',negative:'🌸',neutral:'💜',mixed:'🎀'};
+    var ok=document.getElementById('subOk');
+    ok.style.display='block';ok.textContent='✅ Review analyzed! Sentiment: '+em[a.sent]+' '+a.sent+' ('+a.conf+'% confidence)';
+    toast(em[a.sent]+' '+a.sent.toUpperCase()+' · '+a.conf+'%','Categories: '+a.cats.slice(0,2).join(', '));
+    setTimeout(function(){r.isNew=false;renderTable(currFilt);ok.style.display='none'},3500);
+  },650);
+}
+
+// ─── Firebase listener ────────────────────────────────────────────────────────
+var FB_IDS=new Set(reviews.map(function(r){return r._id}));
+function startFB(){
+  var q=window._fbQ(window._fbCol(window._fbDb,'laptop_reviews'),window._fbOrd('createdAt','desc'));
+  var first=true;
+  window._fbSnap(q,function(snap){
+    var added=0;
+    snap.docChanges().forEach(function(ch){
+      if(ch.type!=='added')return;
+      var id=ch.doc.id;if(FB_IDS.has(id))return;
+      FB_IDS.add(id);
+      var d=ch.doc.data();
+      reviews.unshift({_id:id,name:d.name||'Anonymous',rating:d.rating||3,date:d.date||'',variation:d.variation||'',text:d.text||'',analyzed:analyze(d.text||'',d.rating||3),isNew:!first,fromFB:true});
+      added++;
+    });
+    if(added>0){
+      var fb=reviews.filter(function(r){return r.fromFB}),sd=reviews.filter(function(r){return !r.fromFB});
+      reviews.length=0;reviews.push.apply(reviews,fb.concat(sd));
+      var g=agg();renderKPIs(g);renderRibbon(g.dist,g.n);
+      if(window._chartsOk)updateCharts(g);
+      renderDims(g.dims);renderTags(g);renderTable(currFilt);
+      var sb=document.getElementById('syncBar'),st=document.getElementById('syncText');
+      sb.classList.add('show');st.textContent=fb.length+' live review'+(fb.length>1?'s':'')+' from users · Latest: '+fb.slice(0,2).map(function(r){return r.name}).join(', ');
+      if(!first)toast('📬 '+added+' new review'+(added>1?'s':'')+' received!','Dashboard updated in real time.');
+    }
+    first=false;
+  });
+}
+
+// ─── Boot ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',function(){
+  var g=agg();
+  renderKPIs(g);renderRibbon(g.dist,g.n);
+  initCharts(g);window._chartsOk=true;
+  renderDims(g.dims);renderTags(g);renderTable('all');renderWordCloud();
+  var att=0,poll=setInterval(function(){
+    att++;
+    if(window._fbReady){clearInterval(poll);startFB()}
+    else if(att>50)clearInterval(poll);
+  },100);
+});
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TechBloom — Laptop Review Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg = {apiKey:"AIzaSyD1Y_5BkBdZHn7tzLZwruvvzZOAuD5YhMw",authDomain:"algoquest-505d7.firebaseapp.com",projectId:"algoquest-505d7",storageBucket:"algoquest-505d7.firebasestorage.app",messagingSenderId:"17997223063",appId:"1:17997223063:web:d867b9fa58cc856c7945d2",measurementId:"G-J0K2F1WDRK"};
+const app = initializeApp(cfg);
+const db  = getFirestore(app);
+window._fbDb=db; window._fbCol=collection; window._fbAdd=addDoc;
+window._fbQ=query; window._fbOrd=orderBy; window._fbSnap=onSnapshot;
+window._fbTs=serverTimestamp; window._fbReady=true;
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --lav:    #ede9f6;
+  --lav2:   #d8d0f0;
+  --lav3:   #b8a9e3;
+  --lav-ink:#5b3fa0;
+  --mint:   #e2f4ee;
+  --mint2:  #b8e4d4;
+  --mint-ink:#1a7a52;
+  --blush:  #fce8ee;
+  --blush2: #f5c2d0;
+  --blush-ink:#b0364e;
+  --cream:  #fdfaf6;
+  --white:  #ffffff;
+  --ink:    #2d2640;
+  --ink2:   #4a4260;
+  --muted:  #9188a8;
+  --border: #e8e2f5;
+  --shadow: 0 2px 8px rgba(91,63,160,0.07), 0 8px 24px rgba(91,63,160,0.05);
+  --shadow-h:0 4px 16px rgba(91,63,160,0.13), 0 12px 36px rgba(91,63,160,0.09);
+  --r: 16px;
+  --pos:   #1a7a52;
+  --neg:   #b0364e;
+  --neu:   #5b3fa0;
+  --mix:   #b06d1a;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ── Sidebar layout ── */
 .layout{display:flex;min-height:100vh}
 
 /* Sidebar */
