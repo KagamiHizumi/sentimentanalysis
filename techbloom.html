@@ -740,18 +740,19 @@ function navTo(section, btn){
 
 function renderRows(rows){
   var st=function(n){return '★'.repeat(n)+'☆'.repeat(5-n)};
+  var monoStyle='font-family:monospace;font-size:10px;color:var(--muted)';
   return rows.map(function(r){
     var a=r.analyzed;
-    return '<tr class="'+(r.isNew?'new-r':'')+'">'+
-      '<td><span class="badge '+a.sent+'">'+a.emoji+' '+a.sent+'</span></td>'+
-      '<td><span class="stars-txt">'+st(r.rating)+'</span></td>'+
-      '<td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">'+a.conf+'%</td>'+
-      '<td style="white-space:nowrap;font-weight:500;font-size:12px">'+r.name+'</td>'+
-      '<td style="font-size:11px;color:var(--ink2);max-width:260px">'+r.text.substring(0,110)+(r.text.length>110?'…':'')+'</td>'+
-      '<td>'+a.cats.slice(0,2).map(function(c){return '<span class="cat-chip">'+c+'</span>'}).join('')+'</td>'+
-      '<td style="font-size:10px;color:var(--muted);white-space:nowrap">'+( a.ints[0]||'—')+'</td>'+
-      '<td style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap">'+r.date+'</td>'+
-      '</tr>';
+    return '<tr class="'+(r.isNew?'new-r':'')+'">'
+      +'<td><span class="badge '+a.sent+'">'+a.emoji+' '+a.sent+'</span></td>'
+      +'<td><span class="stars-txt">'+st(r.rating)+'</span></td>'
+      +'<td style="'+monoStyle+'">'+a.conf+'%</td>'
+      +'<td style="white-space:nowrap;font-weight:500;font-size:12px">'+r.name+'</td>'
+      +'<td style="font-size:11px;color:var(--ink2);max-width:260px">'+r.text.substring(0,110)+(r.text.length>110?'…':'')+'</td>'
+      +'<td>'+a.cats.slice(0,2).map(function(x){return '<span class="cat-chip">'+x+'</span>'}).join('')+'</td>'
+      +'<td style="font-size:10px;color:var(--muted);white-space:nowrap">'+(a.ints[0]||'—')+'</td>'
+      +'<td style="'+monoStyle+';white-space:nowrap">'+r.date+'</td>'
+      +'</tr>';
   }).join('');
 }
 
@@ -828,6 +829,7 @@ function startFB(){
 
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',function(){
+  try{
   var g=agg();
   renderKPIs(g);renderRibbon(g.dist,g.n);
   initCharts(g);window._chartsOk=true;
@@ -837,6 +839,7 @@ document.addEventListener('DOMContentLoaded',function(){
     if(window._fbReady){clearInterval(poll);startFB()}
     else if(att>50)clearInterval(poll);
   },100);
+  }catch(e){console.error('TechBloom boot error:',e); document.querySelector('.page-header').insertAdjacentHTML('beforebegin','<div style="background:#fce8ee;color:#b0364e;padding:12px 20px;border-radius:8px;margin-bottom:16px;font-size:13px;font-weight:500">⚠️ JS Error: '+e.message+'</div>');}
 });
 </script>
 </body>
