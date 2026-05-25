@@ -105,8 +105,7 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min
   display:inline-block;margin-top:8px;
   font-size:10px;font-weight:600;
   color:var(--lav-ink);text-decoration:none;
-  letter-spacing:0.3px;
-  transition:opacity .15s;
+  letter-spacing:0.3px;transition:opacity .15s;
 }
 .sb-product-link:hover{opacity:.7;text-decoration:underline}
 
@@ -187,11 +186,10 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min
 .card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;box-shadow:var(--shadow);transition:box-shadow .2s}
 .card:hover{box-shadow:var(--shadow-h)}
 .card-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
-.chart-wrap{position:relative;width:100%;overflow:hidden}
-.chart-wrap canvas{max-width:100%!important;height:auto!important;display:block}
-/* Fixed-height chart wrappers for scatter/compound to prevent growth */
-.chart-fixed{position:relative;width:100%;height:260px;overflow:hidden;contain:strict}
-.chart-fixed canvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important}
+.chart-wrap{position:relative;width:100%}
+.chart-wrap canvas{max-width:100%!important}
+.chart-fixed{position:relative;width:100%;height:260px;overflow:hidden}
+.chart-fixed canvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important}
 
 /* ── Word cloud ── */
 .wcloud{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:12px 8px;min-height:150px}
@@ -359,13 +357,13 @@ tr.new-r td{background:var(--mint)}
   <!-- Analytics section -->
   <div class="section-head" id="sec-analytics">Analytics</div>
   <div class="grid3" style="margin-bottom:16px">
-    <div class="card"><div class="card-label">Sentiment Split</div><div class="chart-wrap"><canvas id="donutC"></canvas></div></div>
-    <div class="card"><div class="card-label">Star Distribution</div><div class="chart-wrap"><canvas id="barC"></canvas></div></div>
-    <div class="card"><div class="card-label">Sentiment × Stars</div><div class="chart-wrap"><canvas id="stackC"></canvas></div></div>
+    <div class="card chart-wrap"><div class="card-label">Sentiment Split</div><canvas id="donutC"></canvas></div>
+    <div class="card chart-wrap"><div class="card-label">Star Distribution</div><canvas id="barC"></canvas></div>
+    <div class="card chart-wrap"><div class="card-label">Sentiment × Stars</div><canvas id="stackC"></canvas></div>
   </div>
   <div class="grid2" style="margin-bottom:16px">
-    <div class="card" style="min-height:320px"><div class="card-label">Rating vs VADER Compound</div><div class="chart-fixed"><canvas id="scatC"></canvas></div></div>
-    <div class="card" style="min-height:320px"><div class="card-label">Compound Score per Review</div><div class="chart-fixed"><canvas id="compC"></canvas></div></div>
+    <div class="card chart-wrap" style="min-height:320px"><div class="card-label">Rating vs VADER Compound</div><div class="chart-fixed"><canvas id="scatC"></canvas></div>
+    <div class="card card" style="min-height:320px"><div class="card-label">Compound Score per Review</div><div class="chart-fixed"><canvas id="compC"></canvas></div></div>
   </div>
   <div class="card" style="margin-bottom:24px">
     <div class="card-label">Positive Review Word Cloud</div>
@@ -706,41 +704,27 @@ function updateCharts(g){
 
 // ─── Sidebar navigation ───────────────────────────────────────────────────────
 function navTo(section, btn){
-  // Update active state
   document.querySelectorAll('.sb-link').forEach(function(b){b.classList.remove('active')});
   if(btn) btn.classList.add('active');
-
-  // Map section to element ID
-  var targets = {
-    overview:    'sec-overview',
-    analytics:   'sec-analytics',
-    reviews:     'sec-reviews',
-    submit:      'sec-submit',
-    churn:       'sec-reviews',
-    escalations: 'sec-reviews',
-  };
-  var elId = targets[section];
-  var el = document.getElementById(elId);
-  var mainEl = document.querySelector('.main');
+  var targets={overview:'sec-overview',analytics:'sec-analytics',reviews:'sec-reviews',submit:'sec-submit',churn:'sec-reviews',escalations:'sec-reviews'};
+  var el=document.getElementById(targets[section]);
+  var mainEl=document.querySelector('.main');
   if(el && mainEl){
-    var elTop = el.getBoundingClientRect().top;
-    var mainTop = mainEl.getBoundingClientRect().top;
-    mainEl.scrollTo({top: mainEl.scrollTop + (elTop - mainTop) - 16, behavior:'smooth'});
+    var offset=el.offsetTop - mainEl.offsetTop - 16;
+    mainEl.scrollTo({top:offset,behavior:'smooth'});
   }
-
-  // Special actions for report tabs
   if(section==='churn'){
-    var rows = reviews.filter(function(r){return r.analyzed.churn});
-    if(rows.length){
-      document.getElementById('tbody').innerHTML = renderRows(rows);
+    setTimeout(function(){
+      var rows=reviews.filter(function(r){return r.analyzed.churn});
+      document.getElementById('tbody').innerHTML=renderRows(rows);
       document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
-    }
+    },400);
   } else if(section==='escalations'){
-    var escRows = reviews.filter(function(r){return r.analyzed.esc});
-    if(escRows.length){
-      document.getElementById('tbody').innerHTML = renderRows(escRows);
+    setTimeout(function(){
+      var rows=reviews.filter(function(r){return r.analyzed.esc});
+      document.getElementById('tbody').innerHTML=renderRows(rows);
       document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active')});
-    }
+    },400);
   }
 }
 
@@ -748,16 +732,16 @@ function renderRows(rows){
   var st=function(n){return '★'.repeat(n)+'☆'.repeat(5-n)};
   return rows.map(function(r){
     var a=r.analyzed;
-    return `<tr class="${r.isNew?'new-r':''}">
-      <td><span class="badge ${a.sent}">${a.emoji} ${a.sent}</span></td>
-      <td><span class="stars-txt">${st(r.rating)}</span></td>
-      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">${a.conf}%</td>
-      <td style="white-space:nowrap;font-weight:500;font-size:12px">${r.name}</td>
-      <td style="font-size:11px;color:var(--ink2);max-width:260px">${r.text.substring(0,110)}${r.text.length>110?'…':''}</td>
-      <td>${a.cats.slice(0,2).map(function(c){return `<span class="cat-chip">${c}</span>`}).join('')}</td>
-      <td style="font-size:10px;color:var(--muted);white-space:nowrap">${a.ints[0]||'—'}</td>
-      <td style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap">${r.date}</td>
-    </tr>`;
+    return '<tr class="'+(r.isNew?'new-r':'')+'">'+
+      '<td><span class="badge '+a.sent+'">'+a.emoji+' '+a.sent+'</span></td>'+
+      '<td><span class="stars-txt">'+st(r.rating)+'</span></td>'+
+      '<td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">'+a.conf+'%</td>'+
+      '<td style="white-space:nowrap;font-weight:500;font-size:12px">'+r.name+'</td>'+
+      '<td style="font-size:11px;color:var(--ink2);max-width:260px">'+r.text.substring(0,110)+(r.text.length>110?'…':'')+'</td>'+
+      '<td>'+a.cats.slice(0,2).map(function(c){return '<span class="cat-chip">'+c+'</span>'}).join('')+'</td>'+
+      '<td style="font-size:10px;color:var(--muted);white-space:nowrap">'+( a.ints[0]||'—')+'</td>'+
+      '<td style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap">'+r.date+'</td>'+
+      '</tr>';
   }).join('');
 }
 
